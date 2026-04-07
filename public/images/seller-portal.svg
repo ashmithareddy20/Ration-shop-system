@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" role="img" aria-labelledby="title desc">
+  <title id="title">Seller Portal Illustration</title>
+  <desc id="desc">Seller managing stock quantities and shop inventory.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#18523f"/>
+      <stop offset="100%" stop-color="#103b2f"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="480" rx="26" fill="url(#bg)"/>
+  <circle cx="600" cy="80" r="54" fill="#ffd77b" fill-opacity="0.24"/>
+  <circle cx="118" cy="90" r="60" fill="#6ce3c3" fill-opacity="0.24"/>
+
+  <rect x="88" y="96" width="544" height="290" rx="20" fill="#ecfff6"/>
+  <rect x="88" y="96" width="544" height="52" rx="20" fill="#69c9a5"/>
+  <text x="132" y="128" font-family="Verdana, sans-serif" font-size="22" font-weight="700" fill="#f5fffb">Shop Stock Console</text>
+
+  <g transform="translate(128,186)">
+    <rect x="0" y="0" width="182" height="30" rx="8" fill="#d4f6e9"/>
+    <rect x="0" y="46" width="182" height="30" rx="8" fill="#d4f6e9"/>
+    <rect x="0" y="92" width="182" height="30" rx="8" fill="#d4f6e9"/>
+    <rect x="0" y="138" width="182" height="30" rx="8" fill="#d4f6e9"/>
+
+    <rect x="204" y="0" width="80" height="30" rx="8" fill="#a6d9c7"/>
+    <rect x="204" y="46" width="80" height="30" rx="8" fill="#a6d9c7"/>
+    <rect x="204" y="92" width="80" height="30" rx="8" fill="#a6d9c7"/>
+    <rect x="204" y="138" width="80" height="30" rx="8" fill="#a6d9c7"/>
+  </g>
+
+  <g transform="translate(468,194)">
+    <rect x="0" y="58" width="70" height="96" rx="8" fill="#8dd8b9"/>
+    <rect x="78" y="32" width="70" height="122" rx="8" fill="#73cda7"/>
+    <rect x="156" y="0" width="70" height="154" rx="8" fill="#59c193"/>
+    <text x="112" y="182" text-anchor="middle" font-family="Verdana, sans-serif" font-size="16" font-weight="700" fill="#1d4f3f">Distribution</text>
+  </g>
+</svg>

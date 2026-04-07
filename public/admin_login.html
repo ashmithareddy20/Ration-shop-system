@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | Smart Ration Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #271c12;
+      --bg-2: #6e4822;
+      --surface: rgba(34, 21, 10, 0.74);
+      --text: #fff7ef;
+      --muted: #ecd4c0;
+      --accent: #65d9bb;
+      --error: #ffb5a7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      font-family: "IBM Plex Sans", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 22% 20%, rgba(101, 217, 187, 0.16), transparent 35%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+    }
+
+    .box {
+      width: min(420px, 100%);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 16px;
+      padding: 24px;
+      background: var(--surface);
+      backdrop-filter: blur(9px);
+    }
+
+    .cover {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      margin-bottom: 14px;
+      display: block;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.58rem;
+    }
+
+    p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-size: 0.93rem;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(101, 217, 187, 0.2);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      background: linear-gradient(120deg, var(--accent), #9df4dd);
+      color: #14322b;
+    }
+
+    .meta {
+      margin-top: 13px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    a {
+      color: #cbffee;
+      text-decoration: none;
+    }
+
+    .message {
+      margin-top: 12px;
+      min-height: 1.2rem;
+      color: var(--error);
+      font-size: 0.92rem;
+    }
+
+    .lang-row {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .lang-row select {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 6px 8px;
+    }
+
+    .lang-row option {
+      color: #2f2218;
+    }
+  </style>
+</head>
+<body>
+  <main class="box">
+    <div class="lang-row">
+      <label id="langLabel" for="languageSelect">Language</label>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="te">Telugu</option>
+      </select>
+    </div>
+    <img class="cover" src="images/admin-portal.jpg" alt="Admin portal image">
+    <h1 id="pageTitle">Admin Login</h1>
+    <p id="pageSubtitle">Sign in to monitor shop health, transaction trends, and overall ration delivery analytics.</p>
+
+    <form id="adminForm">
+      <label id="usernameLabel" for="username">Username</label>
+      <input id="username" placeholder="admin" required>
+
+      <label id="passwordLabel" for="password">Password</label>
+      <input id="password" type="password" placeholder="Enter password" required>
+
+      <button id="loginBtn" type="submit">Login</button>
+      <div id="message" class="message"></div>
+    </form>
+
+    <div class="meta">
+      <span id="demoHint">Demo: admin / admin123</span>
+      <a id="backLink" href="index.html">Back to Home</a>
+    </div>
+  </main>
+
+  <script>
+    const LANG_KEY = "ration_lang";
+    const ADMIN_SESSION_KEY = "ration_admin_session";
+    const form = document.getElementById("adminForm");
+    const message = document.getElementById("message");
+    const languageSelect = document.getElementById("languageSelect");
+
+    const copy = {
+      en: {
+        langLabel: "Language",
+        title: "Admin Login",
+        subtitle:
+          "Sign in to monitor shop health, transaction trends, and overall ration delivery analytics.",
+        usernameLabel: "Username",
+        usernamePlaceholder: "admin",
+        passwordLabel: "Password",
+        passwordPlaceholder: "Enter password",
+        loginBtn: "Login",
+        demo: "Demo: admin / admin123",
+        back: "Back to Home",
+      },
+      hi: {
+        langLabel: "Bhasha",
+        title: "Admin Login",
+        subtitle:
+          "Shop health, transactions aur delivery analytics monitor karne ke liye sign in karein.",
+        usernameLabel: "Username",
+        usernamePlaceholder: "admin",
+        passwordLabel: "Password",
+        passwordPlaceholder: "Password dalein",
+        loginBtn: "Login",
+        demo: "Demo: admin / admin123",
+        back: "Home wapas",
+      },
+      te: {
+        langLabel: "భాష",
+        title: "అడ్మిన్ లాగిన్",
+        subtitle:
+          "షాప్ స్థితి, లావాదేవీ ధోరణులు మరియు డెలివరీ విశ్లేషణలను చూడటానికి సైన్ ఇన్ చేయండి.",
+        usernameLabel: "యూజర్ పేరు",
+        usernamePlaceholder: "admin",
+        passwordLabel: "పాస్వర్డ్",
+        passwordPlaceholder: "పాస్వర్డ్ నమోదు చేయండి",
+        loginBtn: "లాగిన్",
+        demo: "డెమో: admin / admin123",
+        back: "హోమ్‌కు వెళ్ళండి",
+      },
+    };
+
+    function applyLanguage(lang) {
+      const text = copy[lang] || copy.en;
+      document.documentElement.lang = lang;
+      localStorage.setItem(LANG_KEY, lang);
+      document.getElementById("langLabel").textContent = text.langLabel;
+      document.getElementById("pageTitle").textContent = text.title;
+      document.getElementById("pageSubtitle").textContent = text.subtitle;
+      document.getElementById("usernameLabel").textContent = text.usernameLabel;
+      document.getElementById("passwordLabel").textContent = text.passwordLabel;
+      document.getElementById("loginBtn").textContent = text.loginBtn;
+      document.getElementById("demoHint").textContent = text.demo;
+      document.getElementById("backLink").textContent = text.back;
+      document.getElementById("username").placeholder = text.usernamePlaceholder;
+      document.getElementById("password").placeholder = text.passwordPlaceholder;
+    }
+
+    const savedLanguage = localStorage.getItem(LANG_KEY);
+    languageSelect.value = copy[savedLanguage] ? savedLanguage : "en";
+    applyLanguage(languageSelect.value);
+    languageSelect.addEventListener("change", () => {
+      applyLanguage(languageSelect.value);
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== LANG_KEY) return;
+      const nextLanguage = copy[event.newValue] ? event.newValue : "en";
+      if (nextLanguage === languageSelect.value) return;
+      languageSelect.value = nextLanguage;
+      applyLanguage(nextLanguage);
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      message.textContent = "";
+
+      const payload = {
+        username: document.getElementById("username").value.trim(),
+        password: document.getElementById("password").value.trim(),
+      };
+
+      try {
+        const response = await fetch("/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Unable to login.");
+        }
+
+        localStorage.setItem(ADMIN_SESSION_KEY, "active");
+        window.location.href = "admin_dashboard.html";
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Login | Smart Ration Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #101f3d;
+      --bg-2: #305f89;
+      --surface: rgba(6, 18, 36, 0.76);
+      --text: #f7fbff;
+      --muted: #bad0e6;
+      --accent: #f7b733;
+      --error: #ff8f7f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(247, 183, 51, 0.22), transparent 35%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      font-family: "IBM Plex Sans", sans-serif;
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+
+    .panel {
+      width: min(440px, 100%);
+      border-radius: 18px;
+      padding: 26px;
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      animation: fadeUp 0.5s ease;
+    }
+
+    .cover {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 14px;
+      display: block;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.6rem;
+    }
+
+    p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    label {
+      display: block;
+      font-size: 0.95rem;
+      margin: 12px 0 6px;
+      color: #deebf8;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      padding: 12px 14px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(247, 183, 51, 0.2);
+    }
+
+    button {
+      margin-top: 18px;
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-weight: 700;
+      font-size: 1rem;
+      background: linear-gradient(120deg, var(--accent), #ffd778);
+      color: #10253f;
+      cursor: pointer;
+    }
+
+    .meta {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .link {
+      color: #d7f1ff;
+      text-decoration: none;
+      font-size: 0.92rem;
+    }
+
+    .hint {
+      color: #d3e8f8;
+      font-size: 0.9rem;
+    }
+
+    .message {
+      margin-top: 14px;
+      min-height: 1.2rem;
+      font-size: 0.92rem;
+      color: var(--error);
+    }
+
+    .lang-row {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .lang-row select {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 6px 8px;
+    }
+
+    .lang-row option {
+      color: #1b2f49;
+    }
+  </style>
+</head>
+<body>
+  <main class="panel">
+    <div class="lang-row">
+      <label id="langLabel" for="languageSelect">Language</label>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="te">Telugu</option>
+      </select>
+    </div>
+    <img class="cover" src="images/user-portal.jpg" alt="User portal image">
+    <h1 id="pageTitle">User Login</h1>
+    <p id="pageSubtitle">Sign in with ration card details to place your monthly order and track order history.</p>
+
+    <form id="loginForm">
+      <label id="rationLabel" for="rationCard">Ration Card Number</label>
+      <input id="rationCard" name="rationCard" placeholder="Example: RC101" required>
+
+      <label id="passwordLabel" for="password">Password</label>
+      <input id="password" name="password" type="password" placeholder="Enter password" required>
+
+      <button id="loginBtn" type="submit">Login</button>
+      <div id="message" class="message"></div>
+    </form>
+
+    <div class="meta">
+      <span id="demoHint" class="hint">Demo: RC101 / 1234</span>
+      <a id="backLink" class="link" href="index.html">Back to Home</a>
+    </div>
+  </main>
+
+  <script>
+    const LANG_KEY = "ration_lang";
+    const USER_SESSION_KEY = "ration_user_session";
+    const USER_SHOP_KEY = "ration_user_shop";
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+    const languageSelect = document.getElementById("languageSelect");
+
+    const copy = {
+      en: {
+        langLabel: "Language",
+        title: "User Login",
+        subtitle:
+          "Sign in with ration card details to place your monthly order and track order history.",
+        rationLabel: "Ration Card Number",
+        rationPlaceholder: "Example: RC101",
+        passwordLabel: "Password",
+        passwordPlaceholder: "Enter password",
+        loginBtn: "Login",
+        demo: "Demo: RC101 / 1234",
+        back: "Back to Home",
+      },
+      hi: {
+        langLabel: "Bhasha",
+        title: "User Login",
+        subtitle:
+          "Ration card details se login karke monthly order place karein aur history track karein.",
+        rationLabel: "Ration Card Number",
+        rationPlaceholder: "Udaharan: RC101",
+        passwordLabel: "Password",
+        passwordPlaceholder: "Password dalein",
+        loginBtn: "Login",
+        demo: "Demo: RC101 / 1234",
+        back: "Home wapas",
+      },
+      te: {
+        langLabel: "భాష",
+        title: "యూజర్ లాగిన్",
+        subtitle:
+          "రేషన్ కార్డు వివరాలతో లాగిన్ అయి నెలవారీ ఆర్డర్ చేయండి మరియు ఆర్డర్ చరిత్రను చూడండి.",
+        rationLabel: "రేషన్ కార్డు నంబర్",
+        rationPlaceholder: "ఉదాహరణ: RC101",
+        passwordLabel: "పాస్వర్డ్",
+        passwordPlaceholder: "పాస్వర్డ్ నమోదు చేయండి",
+        loginBtn: "లాగిన్",
+        demo: "డెమో: RC101 / 1234",
+        back: "హోమ్‌కు వెళ్ళండి",
+      },
+    };
+
+    function applyLanguage(lang) {
+      const text = copy[lang] || copy.en;
+      document.documentElement.lang = lang;
+      localStorage.setItem(LANG_KEY, lang);
+      document.getElementById("langLabel").textContent = text.langLabel;
+      document.getElementById("pageTitle").textContent = text.title;
+      document.getElementById("pageSubtitle").textContent = text.subtitle;
+      document.getElementById("rationLabel").textContent = text.rationLabel;
+      document.getElementById("passwordLabel").textContent = text.passwordLabel;
+      document.getElementById("loginBtn").textContent = text.loginBtn;
+      document.getElementById("demoHint").textContent = text.demo;
+      document.getElementById("backLink").textContent = text.back;
+      document.getElementById("rationCard").placeholder = text.rationPlaceholder;
+      document.getElementById("password").placeholder = text.passwordPlaceholder;
+    }
+
+    const savedLanguage = localStorage.getItem(LANG_KEY);
+    languageSelect.value = copy[savedLanguage] ? savedLanguage : "en";
+    applyLanguage(languageSelect.value);
+    languageSelect.addEventListener("change", () => {
+      applyLanguage(languageSelect.value);
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== LANG_KEY) return;
+      const nextLanguage = copy[event.newValue] ? event.newValue : "en";
+      if (nextLanguage === languageSelect.value) return;
+      languageSelect.value = nextLanguage;
+      applyLanguage(nextLanguage);
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      message.textContent = "";
+
+      const payload = {
+        rationCard: document.getElementById("rationCard").value.trim(),
+        password: document.getElementById("password").value.trim(),
+      };
+
+      try {
+        const response = await fetch("/user/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Unable to login.");
+        }
+
+        localStorage.setItem(USER_SESSION_KEY, JSON.stringify(data.user));
+        localStorage.setItem(USER_SHOP_KEY, JSON.stringify(data.assignedShop || null));
+        window.location.href = "user_dashboard.html";
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>

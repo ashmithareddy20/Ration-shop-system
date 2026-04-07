@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Smart Ration Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #26140d;
+      --bg-2: #70401e;
+      --surface: rgba(34, 18, 10, 0.78);
+      --surface-2: rgba(40, 23, 13, 0.86);
+      --text: #fff6ec;
+      --muted: #efceb1;
+      --border: rgba(255, 255, 255, 0.2);
+      --accent: #65dbc0;
+      --danger: #ffb8ac;
+      --ok: #a8ffde;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 16px 36px;
+      color: var(--text);
+      font-family: "IBM Plex Sans", sans-serif;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(101, 219, 192, 0.17), transparent 32%),
+        radial-gradient(circle at 84% 18%, rgba(255, 203, 120, 0.16), transparent 32%),
+        linear-gradient(138deg, var(--bg-1), var(--bg-2));
+    }
+
+    .wrap {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .top {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 16px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.3rem, 2.9vw, 2rem);
+    }
+
+    .muted {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .lang-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .lang-wrap select {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.09);
+      color: var(--text);
+      padding: 7px 8px;
+    }
+
+    .lang-wrap option {
+      color: #352318;
+    }
+
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn-soft {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--text);
+    }
+
+    .btn-main {
+      background: linear-gradient(120deg, var(--accent), #a4f4e2);
+      color: #17362f;
+    }
+
+    .btn-danger {
+      background: linear-gradient(120deg, #ffc4ba, #ffd9d2);
+      color: #552723;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .stat-card .label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .stat-card .value {
+      margin-top: 8px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .panel {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      overflow: auto;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.1rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .field input,
+    .field select {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.09);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 8px 9px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(101, 219, 192, 0.2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 8px 6px;
+      vertical-align: top;
+    }
+
+    th {
+      color: #ffe7d1;
+      font-weight: 600;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      display: inline-block;
+      background: rgba(255, 184, 172, 0.2);
+      border: 1px solid rgba(255, 184, 172, 0.45);
+      color: #ffd9d1;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 0.8rem;
+    }
+
+    .status {
+      margin-top: 8px;
+      min-height: 1.2rem;
+      color: var(--danger);
+      font-size: 0.9rem;
+    }
+
+    .status.ok { color: var(--ok); }
+
+    .month-table input[type="number"] {
+      width: 100px;
+      text-align: right;
+    }
+
+    .month-table input[type="checkbox"] {
+      transform: scale(1.1);
+    }
+
+    .icon {
+      width: 42px;
+      height: 30px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      object-fit: cover;
+      background: rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div>
+        <h1 id="pageTitle">Admin Dashboard</h1>
+        <div id="generatedAt" class="muted">Loading analytics...</div>
+      </div>
+      <div class="actions">
+        <div class="lang-wrap">
+          <label id="langLabel" for="languageSelect">Language</label>
+          <select id="languageSelect" aria-label="Language">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="te">Telugu</option>
+          </select>
+        </div>
+        <button id="refreshBtn" class="btn-main" type="button">Refresh Data</button>
+        <button id="logoutBtn" class="btn-danger" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="stats">
+      <article class="stat-card">
+        <div id="labelTotalUsers" class="label">Total Users</div>
+        <div id="totalUsers" class="value">0</div>
+      </article>
+      <article class="stat-card">
+        <div id="labelTotalSellers" class="label">Total Sellers</div>
+        <div id="totalSellers" class="value">0</div>
+      </article>
+      <article class="stat-card">
+        <div id="labelTransactions" class="label">Transactions</div>
+        <div id="totalTransactions" class="value">0</div>
+      </article>
+      <article class="stat-card">
+        <div id="labelRevenue" class="label">Revenue</div>
+        <div id="totalRevenue" class="value">Rs 0</div>
+      </article>
+      <article class="stat-card">
+        <div id="labelDeliveryPersons" class="label">Delivery Persons</div>
+        <div id="totalDeliveryPersons" class="value">0</div>
+      </article>
+      <article class="stat-card">
+        <div id="labelMonthItems" class="label">Available Month Items</div>
+        <div id="totalMonthItems" class="value">0</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2 id="addUserTitle">Add User (Direct to MongoDB)</h2>
+      <form id="addUserForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="newName">Name</label>
+            <input id="newName" required>
+          </div>
+          <div class="field">
+            <label for="newCard">Ration Card</label>
+            <input id="newCard" required>
+          </div>
+          <div class="field">
+            <label for="newAadhaar">Aadhaar</label>
+            <input id="newAadhaar">
+          </div>
+          <div class="field">
+            <label for="newVillage">Village</label>
+            <input id="newVillage">
+          </div>
+          <div class="field">
+            <label for="newPhone">Phone</label>
+            <input id="newPhone">
+          </div>
+          <div class="field">
+            <label for="newPassword">Password</label>
+            <input id="newPassword" type="password" required>
+          </div>
+        </div>
+        <button id="addUserBtn" class="btn-main" type="submit">Add User</button>
+        <div id="addUserStatus" class="status"></div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2 id="monthlyItemTitle">Monthly Item Availability</h2>
+      <form id="monthForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="monthKeyInput">Month</label>
+            <input id="monthKeyInput" type="month" required>
+          </div>
+        </div>
+        <div id="monthItemsWrap" class="muted">Loading month config...</div>
+        <button id="saveMonthBtn" class="btn-main" type="submit">Save Monthly Items</button>
+        <div id="monthStatus" class="status"></div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2 id="deliveryVillageTitle">Delivery Person By Village</h2>
+      <form id="deliveryForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="deliveryVillage">Village</label>
+            <input id="deliveryVillage" required>
+          </div>
+          <div class="field">
+            <label for="deliveryName">Delivery Person Name</label>
+            <input id="deliveryName" required>
+          </div>
+          <div class="field">
+            <label for="deliveryPhone">Phone</label>
+            <input id="deliveryPhone">
+          </div>
+          <div class="field">
+            <label for="deliveryActive">Status</label>
+            <select id="deliveryActive">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <button id="assignDeliveryBtn" class="btn-main" type="submit">Assign Delivery Person</button>
+        <div id="deliveryStatus" class="status"></div>
+      </form>
+      <div id="deliveryListWrap" class="muted" style="margin-top:10px;">Loading...</div>
+    </section>
+
+    <section class="panel">
+      <h2 id="usersDirectoryTitle">Users Directory</h2>
+      <div id="usersWrap" class="muted">Loading...</div>
+    </section>
+
+    <section class="panel">
+      <h2 id="lowStockTitle">Low Stock Alert</h2>
+      <div id="lowStockWrap" class="muted">Loading...</div>
+    </section>
+
+    <section class="panel">
+      <h2 id="shopPerformanceTitle">Shop Performance & Status</h2>
+      <div id="shopsWrap" class="muted">Loading...</div>
+    </section>
+
+    <section class="panel">
+      <h2 id="recentTransactionsTitle">Recent Transactions</h2>
+      <div id="transactionsWrap" class="muted">Loading...</div>
+    </section>
+  </main>
+
+  <script>
+    const LANG_KEY = "ration_lang";
+    const ADMIN_SESSION_KEY = "ration_admin_session";
+    if (localStorage.getItem(ADMIN_SESSION_KEY) !== "active") {
+      window.location.href = "admin_login.html";
+    }
+    const languageSelect = document.getElementById("languageSelect");
+    let currentLanguage = "en";
+
+    const I18N = {
+      en: {
+        pageTitle: "Admin Dashboard | Smart Ration Shop",
+        langLabel: "Language",
+        dashboardTitle: "Admin Dashboard",
+        refresh: "Refresh Data",
+        logout: "Logout",
+        totalUsers: "Total Users",
+        totalSellers: "Total Sellers",
+        transactions: "Transactions",
+        revenue: "Revenue",
+        deliveryPersons: "Delivery Persons",
+        monthItems: "Available Month Items",
+        addUserTitle: "Add User (Direct to MongoDB)",
+        addUserBtn: "Add User",
+        monthTitle: "Monthly Item Availability",
+        saveMonthBtn: "Save Monthly Items",
+        deliveryVillageTitle: "Delivery Person By Village",
+        assignDeliveryBtn: "Assign Delivery Person",
+        usersDirectoryTitle: "Users Directory",
+        lowStockTitle: "Low Stock Alert",
+        shopPerformanceTitle: "Shop Performance & Status",
+        recentTransactionsTitle: "Recent Transactions",
+      },
+      hi: {
+        pageTitle: "Admin Dashboard | Smart Ration Shop",
+        langLabel: "Bhasha",
+        dashboardTitle: "Admin Dashboard",
+        refresh: "Data Refresh",
+        logout: "Logout",
+        totalUsers: "Kul Users",
+        totalSellers: "Kul Sellers",
+        transactions: "Transactions",
+        revenue: "Revenue",
+        deliveryPersons: "Delivery Persons",
+        monthItems: "Available Month Items",
+        addUserTitle: "Naya User jodein (Direct MongoDB)",
+        addUserBtn: "User Add karein",
+        monthTitle: "Mahine ke item availability",
+        saveMonthBtn: "Monthly Items Save karein",
+        deliveryVillageTitle: "Village ke hisaab se Delivery Person",
+        assignDeliveryBtn: "Delivery Person Assign karein",
+        usersDirectoryTitle: "Users Directory",
+        lowStockTitle: "Low Stock Alert",
+        shopPerformanceTitle: "Shop Performance & Status",
+        recentTransactionsTitle: "Recent Transactions",
+      },
+      te: {
+        pageTitle: "అడ్మిన్ డ్యాష్‌బోర్డ్ | స్మార్ట్ రేషన్ షాప్",
+        langLabel: "భాష",
+        dashboardTitle: "అడ్మిన్ డ్యాష్‌బోర్డ్",
+        refresh: "డేటా రిఫ్రెష్",
+        logout: "లాగౌట్",
+        totalUsers: "మొత్తం యూజర్లు",
+        totalSellers: "మొత్తం సెల్లర్లు",
+        transactions: "లావాదేవీలు",
+        revenue: "ఆదాయం",
+        deliveryPersons: "డెలివరీ వ్యక్తులు",
+        monthItems: "అందుబాటులో ఉన్న నెలవారీ వస్తువులు",
+        addUserTitle: "కొత్త యూజర్‌ను జోడించండి (నేరుగా MongoDB)",
+        addUserBtn: "యూజర్ జోడించండి",
+        monthTitle: "నెలవారీ వస్తువుల అందుబాటు",
+        saveMonthBtn: "నెలవారీ వస్తువులు సేవ్ చేయండి",
+        deliveryVillageTitle: "గ్రామం వారీగా డెలివరీ వ్యక్తి",
+        assignDeliveryBtn: "డెలివరీ వ్యక్తి కేటాయించండి",
+        usersDirectoryTitle: "యూజర్ల జాబితా",
+        lowStockTitle: "తక్కువ స్టాక్ హెచ్చరిక",
+        shopPerformanceTitle: "షాప్ పనితీరు & స్థితి",
+        recentTransactionsTitle: "ఇటీవలి లావాదేవీలు",
+      },
+    };
+
+    const ITEM_NAMES = {
+      rice: { en: "Rice", hi: "Chawal", te: "బియ్యం" },
+      wheat: { en: "Wheat", hi: "Gehun", te: "గోధుమ" },
+      sugar: { en: "Sugar", hi: "Cheeni", te: "చెక్కెర" },
+      kerosene: { en: "Kerosene", hi: "Kerosene", te: "కిరోసిన్" },
+    };
+
+    function resolveItemKey(itemKey, itemName) {
+      const normalizedKey = String(itemKey || "").trim().toLowerCase();
+      if (ITEM_NAMES[normalizedKey]) return normalizedKey;
+
+      const normalizedName = String(itemName || "")
+        .trim()
+        .toLowerCase()
+        .replaceAll("-", "")
+        .replaceAll(" ", "");
+
+      const aliases = {
+        rice: "rice",
+        chawal: "rice",
+        wheat: "wheat",
+        gehun: "wheat",
+        sugar: "sugar",
+        cheeni: "sugar",
+        kerosene: "kerosene",
+        kerosin: "kerosene",
+      };
+
+      return aliases[normalizedName] || normalizedKey;
+    }
+
+    function getLocalizedItemName(itemKey, fallbackName) {
+      const key = resolveItemKey(itemKey, fallbackName);
+      const names = ITEM_NAMES[key];
+      if (!names) return fallbackName || itemKey || "-";
+      return names[currentLanguage] || names.en;
+    }
+
+    function applyLanguage(lang) {
+      currentLanguage = I18N[lang] ? lang : "en";
+      localStorage.setItem(LANG_KEY, currentLanguage);
+      languageSelect.value = currentLanguage;
+      const text = I18N[currentLanguage];
+
+      document.documentElement.lang = currentLanguage;
+      document.title = text.pageTitle;
+      document.getElementById("langLabel").textContent = text.langLabel;
+      document.getElementById("pageTitle").textContent = text.dashboardTitle;
+      document.getElementById("refreshBtn").textContent = text.refresh;
+      document.getElementById("logoutBtn").textContent = text.logout;
+      document.getElementById("labelTotalUsers").textContent = text.totalUsers;
+      document.getElementById("labelTotalSellers").textContent = text.totalSellers;
+      document.getElementById("labelTransactions").textContent = text.transactions;
+      document.getElementById("labelRevenue").textContent = text.revenue;
+      document.getElementById("labelDeliveryPersons").textContent = text.deliveryPersons;
+      document.getElementById("labelMonthItems").textContent = text.monthItems;
+      document.getElementById("addUserTitle").textContent = text.addUserTitle;
+      document.getElementById("addUserBtn").textContent = text.addUserBtn;
+      document.getElementById("monthlyItemTitle").textContent = text.monthTitle;
+      document.getElementById("saveMonthBtn").textContent = text.saveMonthBtn;
+      document.getElementById("deliveryVillageTitle").textContent = text.deliveryVillageTitle;
+      document.getElementById("assignDeliveryBtn").textContent = text.assignDeliveryBtn;
+      document.getElementById("usersDirectoryTitle").textContent = text.usersDirectoryTitle;
+      document.getElementById("lowStockTitle").textContent = text.lowStockTitle;
+      document.getElementById("shopPerformanceTitle").textContent = text.shopPerformanceTitle;
+      document.getElementById("recentTransactionsTitle").textContent = text.recentTransactionsTitle;
+    }
+
+    const DEFAULT_ITEMS = [
+      { itemKey: "rice", name: "Rice", image: "images/rice.jpeg" },
+      { itemKey: "wheat", name: "Wheat", image: "images/wheat.jfif" },
+      { itemKey: "sugar", name: "Sugar", image: "images/sugar.jfif" },
+      { itemKey: "kerosene", name: "Kerosene", image: "images/kerosene.jfif" },
+    ];
+
+    let currentMonthItems = [];
+
+    function getCurrentMonth() {
+      const now = new Date();
+      const month = `${now.getMonth() + 1}`.padStart(2, "0");
+      return `${now.getFullYear()}-${month}`;
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    function formatDate(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "-";
+      return date.toLocaleString();
+    }
+
+    function setStatus(id, text, ok = false) {
+      const node = document.getElementById(id);
+      node.textContent = text || "";
+      node.classList.toggle("ok", ok);
+    }
+
+    function renderLowStock(list) {
+      const wrap = document.getElementById("lowStockWrap");
+      if (!list.length) {
+        wrap.innerHTML = '<span class="muted">No low stock warning right now.</span>';
+        return;
+      }
+
+      wrap.innerHTML = list.map((shop) => `
+        <div style="margin-bottom:8px;">
+          <strong>${escapeHtml(shop.shopId)} - ${escapeHtml(shop.name)}</strong>
+          <span class="muted">(${escapeHtml(shop.village)})</span>
+          <div class="chips">
+            ${shop.lowItems.map((item) => `<span class="chip">${escapeHtml(getLocalizedItemName("", item))}</span>`).join("")}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderUsers(users) {
+      const wrap = document.getElementById("usersWrap");
+      if (!users.length) {
+        wrap.innerHTML = '<span class="muted">No users found.</span>';
+        return;
+      }
+
+      const rows = users.map((user) => `
+        <tr>
+          <td>${escapeHtml(user.name)}</td>
+          <td>${escapeHtml(user.rationCard)}</td>
+          <td>${escapeHtml(user.aadhaar || "-")}</td>
+          <td>${escapeHtml(user.village || "-")}</td>
+          <td>${escapeHtml(user.phone || "-")}</td>
+        </tr>
+      `).join("");
+
+      wrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Ration Card</th>
+              <th>Aadhaar</th>
+              <th>Village</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function renderDeliveryPersons(list) {
+      const wrap = document.getElementById("deliveryListWrap");
+      if (!list.length) {
+        wrap.innerHTML = '<span class="muted">No delivery persons assigned yet.</span>';
+        return;
+      }
+
+      const rows = list.map((person) => `
+        <tr>
+          <td>${escapeHtml(person.village)}</td>
+          <td>${escapeHtml(person.name)}</td>
+          <td>${escapeHtml(person.phone || "-")}</td>
+          <td>${person.isActive ? "Active" : "Inactive"}</td>
+        </tr>
+      `).join("");
+
+      wrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Village</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function renderMonthItems(items) {
+      const map = new Map(items.map((item) => [item.itemKey, item]));
+      currentMonthItems = DEFAULT_ITEMS.map((base) => {
+        const found = map.get(base.itemKey) || {};
+        return {
+          itemKey: base.itemKey,
+          name: base.name,
+          image: found.image || base.image,
+          price: Number(found.price ?? 0),
+          monthlyLimit: Number(found.monthlyLimit ?? 0),
+          isAvailable: found.isAvailable !== false,
+        };
+      });
+
+      const rows = currentMonthItems.map((item) => {
+        const localizedName = getLocalizedItemName(item.itemKey, item.name);
+        return `
+          <tr>
+            <td><img class="icon" src="${escapeHtml(item.image)}" alt="${escapeHtml(localizedName)}"></td>
+            <td>${escapeHtml(localizedName)}</td>
+            <td><input type="number" min="0" id="price_${item.itemKey}" value="${item.price}"></td>
+            <td><input type="number" min="0" id="limit_${item.itemKey}" value="${item.monthlyLimit}"></td>
+            <td><input type="checkbox" id="available_${item.itemKey}" ${item.isAvailable ? "checked" : ""}></td>
+          </tr>
+        `;
+      }).join("");
+
+      document.getElementById("monthItemsWrap").innerHTML = `
+        <table class="month-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Monthly Limit</th>
+              <th>Available</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function renderShops(shops) {
+      const wrap = document.getElementById("shopsWrap");
+      if (!shops.length) {
+        wrap.innerHTML = '<span class="muted">No shop records found.</span>';
+        return;
+      }
+
+      const rows = shops.map((shop) => {
+        const stock = `${shop.stock.rice}/${shop.stock.wheat}/${shop.stock.sugar}/${shop.stock.kerosene}`;
+        const status = shop.status?.isClosed
+          ? `Closed (${shop.status.leaveNote || "Leave"})`
+          : `Open ${shop.status?.openTime || "09:00"}-${shop.status?.closeTime || "16:00"}`;
+        return `
+          <tr>
+            <td>${escapeHtml(shop.shopId)}</td>
+            <td>${escapeHtml(shop.sellerName)}</td>
+            <td>${escapeHtml(shop.village)}</td>
+            <td>${escapeHtml(status)}</td>
+            <td>${stock}</td>
+            <td>${shop.orderCount}</td>
+            <td>Rs ${shop.totalSales}</td>
+          </tr>
+        `;
+      }).join("");
+
+      wrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Shop</th>
+              <th>Seller</th>
+              <th>Village</th>
+              <th>Status</th>
+              <th>Stock (R/W/S/K)</th>
+              <th>Orders</th>
+              <th>Sales</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function renderTransactions(transactions) {
+      const wrap = document.getElementById("transactionsWrap");
+      if (!transactions.length) {
+        wrap.innerHTML = '<span class="muted">No transactions found.</span>';
+        return;
+      }
+
+      const rows = transactions.map((order) => {
+        const items = (order.items || [])
+          .map((item) => `${getLocalizedItemName(item.itemKey, item.name)} (${item.qty})`)
+          .join(", ");
+        const delivery = order.deliveryPerson?.name
+          ? `${order.deliveryPerson.name} (${order.deliveryPerson.phone || "-"})`
+          : "-";
+        return `
+          <tr>
+            <td>${formatDate(order.date)}</td>
+            <td>${escapeHtml(order.orderId)}</td>
+            <td>${escapeHtml(order.rationCard)}</td>
+            <td>${escapeHtml(order.userName || "-")}</td>
+            <td>${escapeHtml(order.shopId)}</td>
+            <td>${escapeHtml(items)}</td>
+            <td>${escapeHtml(order.deliverySlot || "-")}</td>
+            <td>${escapeHtml(order.paymentMethod || "-")}</td>
+            <td>${escapeHtml(delivery)}</td>
+            <td>Rs ${order.total}</td>
+          </tr>
+        `;
+      }).join("");
+
+      wrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Order ID</th>
+              <th>Card</th>
+              <th>User</th>
+              <th>Shop</th>
+              <th>Items</th>
+              <th>Slot</th>
+              <th>Payment</th>
+              <th>Delivery Person</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    async function loadMonthItems(monthKey) {
+      const res = await fetch(`/admin/month-items?month=${encodeURIComponent(monthKey)}`);
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        throw new Error(data.message || "Unable to fetch month items.");
+      }
+      renderMonthItems(data.items || []);
+      return data;
+    }
+
+    async function loadAdminDashboard() {
+      try {
+        const monthKey = document.getElementById("monthKeyInput").value || getCurrentMonth();
+        const [overviewRes, shopsRes, txnRes, usersRes, deliveryRes, monthData] = await Promise.all([
+          fetch(`/admin/overview?month=${encodeURIComponent(monthKey)}`),
+          fetch("/admin/shops"),
+          fetch("/admin/transactions?limit=25"),
+          fetch("/admin/users"),
+          fetch("/admin/delivery-persons"),
+          loadMonthItems(monthKey),
+        ]);
+
+        const overview = await overviewRes.json();
+        const shops = await shopsRes.json();
+        const transactions = await txnRes.json();
+        const users = await usersRes.json();
+        const delivery = await deliveryRes.json();
+
+        if (!overviewRes.ok || !overview.ok) {
+          throw new Error(overview.message || "Unable to fetch overview.");
+        }
+        if (!shopsRes.ok || !shops.ok) {
+          throw new Error(shops.message || "Unable to fetch shops.");
+        }
+        if (!txnRes.ok || !transactions.ok) {
+          throw new Error(transactions.message || "Unable to fetch transactions.");
+        }
+        if (!usersRes.ok || !users.ok) {
+          throw new Error(users.message || "Unable to fetch users.");
+        }
+        if (!deliveryRes.ok || !delivery.ok) {
+          throw new Error(delivery.message || "Unable to fetch delivery persons.");
+        }
+
+        document.getElementById("totalUsers").textContent = overview.stats.totalUsers;
+        document.getElementById("totalSellers").textContent = overview.stats.totalSellers;
+        document.getElementById("totalTransactions").textContent = overview.stats.totalTransactions;
+        document.getElementById("totalRevenue").textContent = `Rs ${overview.stats.totalRevenue}`;
+        document.getElementById("totalDeliveryPersons").textContent = overview.stats.activeDeliveryPersons || 0;
+        document.getElementById("totalMonthItems").textContent = overview.stats.availableMonthlyItems || 0;
+        document.getElementById("generatedAt").textContent = `Updated on ${formatDate(overview.generatedAt)} | Month ${monthData.monthKey}`;
+
+        renderUsers(users.users || []);
+        renderDeliveryPersons(delivery.deliveryPersons || []);
+        renderLowStock(overview.lowStockShops || []);
+        renderShops(shops.shops || []);
+        renderTransactions(transactions.transactions || []);
+      } catch (error) {
+        document.getElementById("generatedAt").textContent = error.message;
+      }
+    }
+
+    document.getElementById("monthKeyInput").value = getCurrentMonth();
+    document.getElementById("monthKeyInput").addEventListener("change", async () => {
+      try {
+        setStatus("monthStatus", "");
+        await loadMonthItems(document.getElementById("monthKeyInput").value);
+      } catch (error) {
+        setStatus("monthStatus", error.message);
+      }
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", loadAdminDashboard);
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem(ADMIN_SESSION_KEY);
+      window.location.href = "admin_login.html";
+    });
+
+    document.getElementById("addUserForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      setStatus("addUserStatus", "");
+
+      const payload = {
+        name: document.getElementById("newName").value.trim(),
+        rationCard: document.getElementById("newCard").value.trim(),
+        aadhaar: document.getElementById("newAadhaar").value.trim(),
+        village: document.getElementById("newVillage").value.trim(),
+        phone: document.getElementById("newPhone").value.trim(),
+        password: document.getElementById("newPassword").value.trim(),
+      };
+
+      try {
+        const response = await fetch("/admin/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Unable to add user.");
+        }
+
+        setStatus("addUserStatus", data.message, true);
+        event.target.reset();
+        await loadAdminDashboard();
+      } catch (error) {
+        setStatus("addUserStatus", error.message);
+      }
+    });
+
+    document.getElementById("monthForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      setStatus("monthStatus", "");
+
+      const monthKey = document.getElementById("monthKeyInput").value || getCurrentMonth();
+      const payload = {
+        monthKey,
+        items: currentMonthItems.map((item) => ({
+          itemKey: item.itemKey,
+          price: Number(document.getElementById(`price_${item.itemKey}`).value || 0),
+          monthlyLimit: Number(document.getElementById(`limit_${item.itemKey}`).value || 0),
+          isAvailable: document.getElementById(`available_${item.itemKey}`).checked,
+        })),
+      };
+
+      try {
+        const response = await fetch("/admin/month-items", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Unable to save monthly items.");
+        }
+
+        setStatus("monthStatus", data.message, true);
+        renderMonthItems(data.items || []);
+        await loadAdminDashboard();
+      } catch (error) {
+        setStatus("monthStatus", error.message);
+      }
+    });
+
+    document.getElementById("deliveryForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      setStatus("deliveryStatus", "");
+
+      const payload = {
+        village: document.getElementById("deliveryVillage").value.trim(),
+        name: document.getElementById("deliveryName").value.trim(),
+        phone: document.getElementById("deliveryPhone").value.trim(),
+        isActive: document.getElementById("deliveryActive").value === "true",
+      };
+
+      try {
+        const response = await fetch("/admin/delivery-persons", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Unable to assign delivery person.");
+        }
+
+        setStatus("deliveryStatus", data.message, true);
+        event.target.reset();
+        document.getElementById("deliveryActive").value = "true";
+        await loadAdminDashboard();
+      } catch (error) {
+        setStatus("deliveryStatus", error.message);
+      }
+    });
+
+    const savedLanguage = localStorage.getItem(LANG_KEY);
+    applyLanguage(I18N[savedLanguage] ? savedLanguage : "en");
+    languageSelect.addEventListener("change", () => {
+      applyLanguage(languageSelect.value);
+      loadAdminDashboard();
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== LANG_KEY) return;
+      const nextLanguage = I18N[event.newValue] ? event.newValue : "en";
+      if (nextLanguage === currentLanguage) return;
+      applyLanguage(nextLanguage);
+      loadAdminDashboard();
+    });
+
+    loadAdminDashboard();
+  </script>
+</body>
+</html>

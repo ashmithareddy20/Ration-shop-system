@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Ration Shop System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #08162a;
+      --bg-mid: #12395f;
+      --accent: #f8bf2c;
+      --surface: rgba(10, 28, 48, 0.72);
+      --text: #f8fbff;
+      --muted: #bbd3e6;
+      --border: rgba(255, 255, 255, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "IBM Plex Sans", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 15%, rgba(63, 224, 197, 0.20), transparent 30%),
+        radial-gradient(circle at 85% 10%, rgba(248, 191, 44, 0.18), transparent 35%),
+        linear-gradient(135deg, var(--bg-deep), var(--bg-mid));
+      display: flex;
+      justify-content: center;
+      padding: 32px 20px;
+    }
+
+    .app {
+      width: min(1180px, 100%);
+      display: grid;
+      gap: 24px;
+      animation: rise 0.6s ease-out;
+    }
+
+    .top-controls {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      background: rgba(7, 22, 38, 0.58);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+    }
+
+    .top-controls label {
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .top-controls select {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-weight: 600;
+      min-width: 170px;
+    }
+
+    .top-controls option {
+      color: #10243f;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.7rem, 3.7vw, 2.8rem);
+      letter-spacing: 0.4px;
+    }
+
+    .hero p {
+      margin: 12px 0 0;
+      max-width: 760px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 1.02rem;
+    }
+
+    .hero-art {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      display: block;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      background: rgba(7, 22, 38, 0.68);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.35rem;
+    }
+
+    .card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.55;
+      min-height: 72px;
+    }
+
+    .portal-thumb {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .cta {
+      text-decoration: none;
+      display: inline-block;
+      background: linear-gradient(120deg, var(--accent), #ffd768);
+      color: #10243f;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 10px 18px;
+      letter-spacing: 0.2px;
+    }
+
+    .demo-box {
+      background: rgba(4, 18, 33, 0.74);
+      border: 1px dashed rgba(255, 255, 255, 0.25);
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .demo-box h3 {
+      margin-top: 0;
+      font-family: "Sora", sans-serif;
+      font-size: 1.2rem;
+    }
+
+    .demo-box table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--muted);
+    }
+
+    .demo-box th,
+    .demo-box td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 0.96rem;
+    }
+
+    .demo-box th {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .mono {
+      font-family: "Courier New", monospace;
+      color: #fff8df;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="top-controls">
+      <label id="languageLabel" for="languageSelect">Select Language</label>
+      <select id="languageSelect" aria-label="Select Language">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="te">Telugu</option>
+      </select>
+    </section>
+
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <h1 id="heroTitle">Smart Ration Shop System</h1>
+          <p id="heroText">
+            A complete web portal for ration beneficiaries, shop sellers, administrators, and delivery staff.
+            Place monthly ration orders, maintain stock in real time, and monitor operations from one unified dashboard.
+          </p>
+        </div>
+        <img class="hero-art" src="images/cover-image.jfif" alt="Ration shop cover image">
+      </div>
+    </section>
+
+    <section class="cards">
+      <article class="card">
+        <img class="portal-thumb" src="images/user-portal.jpg" alt="User portal image">
+        <h2 id="userCardTitle">User Portal</h2>
+        <p id="userCardText">Beneficiaries can log in, view available stock for their linked shop, place new orders, and track past transactions.</p>
+        <a class="cta" id="userCardCta" href="user_login.html">Open User Login</a>
+      </article>
+
+      <article class="card">
+        <img class="portal-thumb" src="images/seller-portal.jpg" alt="Seller portal image">
+        <h2 id="sellerCardTitle">Seller Portal</h2>
+        <p id="sellerCardText">Shop sellers can update current stock levels, review order flow, and monitor distribution at shop level.</p>
+        <a class="cta" id="sellerCardCta" href="seller_login.html">Open Seller Login</a>
+      </article>
+
+      <article class="card">
+        <img class="portal-thumb" src="images/admin-portal.jpg" alt="Admin portal image">
+        <h2 id="adminCardTitle">Admin Panel</h2>
+        <p id="adminCardText">Administrators can review total transactions, identify low stock shops, and inspect system-wide performance.</p>
+        <a class="cta" id="adminCardCta" href="admin_login.html">Open Admin Login</a>
+      </article>
+
+      <article class="card">
+        <img class="portal-thumb" src="images/delivery-portal.jpg" alt="Delivery portal image">
+        <h2 id="deliveryCardTitle">Delivery Portal</h2>
+        <p id="deliveryCardText">Delivery staff can log in by village and phone, then view monthly home delivery assignments.</p>
+        <a class="cta" id="deliveryCardCta" href="delivery_login.html">Open Delivery Login</a>
+      </article>
+    </section>
+
+    <section class="demo-box">
+      <h3 id="demoTitle">Demo Credentials</h3>
+      <table>
+        <thead>
+          <tr>
+            <th id="thRole">Role</th>
+            <th id="thUsername">Username / ID</th>
+            <th id="thPassword">Password / Phone</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="rowUser">User</td>
+            <td class="mono">RC101</td>
+            <td class="mono">1234</td>
+          </tr>
+          <tr>
+            <td id="rowSeller">Seller</td>
+            <td class="mono">S01</td>
+            <td class="mono">seller123</td>
+          </tr>
+          <tr>
+            <td id="rowAdmin">Admin</td>
+            <td class="mono">admin</td>
+            <td class="mono">admin123</td>
+          </tr>
+          <tr>
+            <td id="rowDelivery">Delivery</td>
+            <td class="mono">Kothapalli</td>
+            <td class="mono">9001112223</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    const LANG_KEY = "ration_lang";
+    const languageSelect = document.getElementById("languageSelect");
+
+    const texts = {
+      en: {
+        pageTitle: "Smart Ration Shop System",
+        langLabel: "Select Language",
+        optionEn: "English",
+        optionHi: "Hindi",
+        optionTe: "Telugu",
+        heroTitle: "Smart Ration Shop System",
+        heroText:
+          "A complete web portal for ration beneficiaries, shop sellers, administrators, and delivery staff. Place monthly ration orders, maintain stock in real time, and monitor operations from one unified dashboard.",
+        userCardTitle: "User Portal",
+        userCardText:
+          "Beneficiaries can log in, view available stock for their linked shop, place new orders, and track past transactions.",
+        userCardCta: "Open User Login",
+        sellerCardTitle: "Seller Portal",
+        sellerCardText:
+          "Shop sellers can update current stock levels, review order flow, and monitor distribution at shop level.",
+        sellerCardCta: "Open Seller Login",
+        adminCardTitle: "Admin Panel",
+        adminCardText:
+          "Administrators can review total transactions, identify low stock shops, and inspect system-wide performance.",
+        adminCardCta: "Open Admin Login",
+        deliveryCardTitle: "Delivery Portal",
+        deliveryCardText:
+          "Delivery staff can log in by village and phone, then view monthly home delivery assignments.",
+        deliveryCardCta: "Open Delivery Login",
+        demoTitle: "Demo Credentials",
+        thRole: "Role",
+        thUsername: "Username / ID",
+        thPassword: "Password / Phone",
+        rowUser: "User",
+        rowSeller: "Seller",
+        rowAdmin: "Admin",
+        rowDelivery: "Delivery",
+      },
+      hi: {
+        pageTitle: "Smart Ration Shop System (Hindi)",
+        langLabel: "Bhasha Chunein",
+        optionEn: "Angrezi",
+        optionHi: "Hindi",
+        optionTe: "Telugu",
+        heroTitle: "Smart Ration Shop System",
+        heroText:
+          "Yeh ration labharthi, seller, admin aur delivery staff ke liye ek poora portal hai. Monthly ration order, stock update aur delivery monitoring sab ek jagah se karein.",
+        userCardTitle: "User Portal",
+        userCardText:
+          "Labharthi login karke stock dekh sakte hain, order place kar sakte hain aur history track kar sakte hain.",
+        userCardCta: "User Login Kholein",
+        sellerCardTitle: "Seller Portal",
+        sellerCardText:
+          "Sellers stock update kar sakte hain, orders review kar sakte hain aur distribution monitor kar sakte hain.",
+        sellerCardCta: "Seller Login Kholein",
+        adminCardTitle: "Admin Panel",
+        adminCardText:
+          "Admin transactions, low stock shops aur system performance dekh sakte hain.",
+        adminCardCta: "Admin Login Kholein",
+        deliveryCardTitle: "Delivery Portal",
+        deliveryCardText:
+          "Delivery staff village aur phone se login karke monthly ghar delivery assignments dekh sakte hain.",
+        deliveryCardCta: "Delivery Login Kholein",
+        demoTitle: "Demo Credentials",
+        thRole: "Bhumika",
+        thUsername: "Username / ID",
+        thPassword: "Password / Phone",
+        rowUser: "User",
+        rowSeller: "Seller",
+        rowAdmin: "Admin",
+        rowDelivery: "Delivery",
+      },
+      te: {
+        pageTitle: "స్మార్ట్ రేషన్ షాప్ సిస్టమ్",
+        langLabel: "భాషను ఎంచుకోండి",
+        optionEn: "ఇంగ్లీష్",
+        optionHi: "హిందీ",
+        optionTe: "తెలుగు",
+        heroTitle: "స్మార్ట్ రేషన్ షాప్ సిస్టమ్",
+        heroText:
+          "ఇది రేషన్ లబ్ధిదారులు, విక్రేతలు, అడ్మిన్ మరియు డెలివరీ సిబ్బంది కోసం పూర్తి పోర్టల్. నెలవారీ రేషన్ ఆర్డర్లు, స్టాక్ అప్‌డేట్లు మరియు హోమ్ డెలివరీ మానిటరింగ్ అన్నీ ఒకే చోట నిర్వహించండి.",
+        userCardTitle: "యూజర్ పోర్టల్",
+        userCardText:
+          "యూజర్లు లాగిన్ అయి స్టాక్ చూడవచ్చు, ఆర్డర్ చేయవచ్చు మరియు చరిత్రను ట్రాక్ చేయవచ్చు.",
+        userCardCta: "యూజర్ లాగిన్ తెరువు",
+        sellerCardTitle: "సెల్లర్ పోర్టల్",
+        sellerCardText:
+          "సెల్లర్లు స్టాక్ అప్‌డేట్ చేయవచ్చు, ఆర్డర్లు పరిశీలించవచ్చు మరియు పంపిణీని మానిటర్ చేయవచ్చు.",
+        sellerCardCta: "సెల్లర్ లాగిన్ తెరువు",
+        adminCardTitle: "అడ్మిన్ ప్యానెల్",
+        adminCardText:
+          "అడ్మిన్ లావాదేవీలు, తక్కువ స్టాక్ ఉన్న షాపులు మరియు సిస్టమ్ పనితీరును చూడవచ్చు.",
+        adminCardCta: "అడ్మిన్ లాగిన్ తెరువు",
+        deliveryCardTitle: "డెలివరీ పోర్టల్",
+        deliveryCardText:
+          "డెలివరీ సిబ్బంది గ్రామం మరియు ఫోన్‌తో లాగిన్ అయి నెలవారీ హోమ్ డెలివరీ కేటాయింపులు చూడవచ్చు.",
+        deliveryCardCta: "డెలివరీ లాగిన్ తెరువు",
+        demoTitle: "డెమో వివరాలు",
+        thRole: "పాత్ర",
+        thUsername: "యూజర్ పేరు / ఐడి",
+        thPassword: "పాస్వర్డ్ / ఫోన్",
+        rowUser: "యూజర్",
+        rowSeller: "సెల్లర్",
+        rowAdmin: "అడ్మిన్",
+        rowDelivery: "డెలివరీ",
+      },
+    };
+
+    function applyLanguage(language) {
+      const copy = texts[language] || texts.en;
+      localStorage.setItem(LANG_KEY, language);
+      document.documentElement.lang = language;
+      document.title = copy.pageTitle;
+
+      document.getElementById("languageLabel").textContent = copy.langLabel;
+      languageSelect.options[0].textContent = copy.optionEn;
+      languageSelect.options[1].textContent = copy.optionHi;
+      languageSelect.options[2].textContent = copy.optionTe;
+      languageSelect.setAttribute("aria-label", copy.langLabel);
+
+      document.getElementById("heroTitle").textContent = copy.heroTitle;
+      document.getElementById("heroText").textContent = copy.heroText;
+      document.getElementById("userCardTitle").textContent = copy.userCardTitle;
+      document.getElementById("userCardText").textContent = copy.userCardText;
+      document.getElementById("userCardCta").textContent = copy.userCardCta;
+      document.getElementById("sellerCardTitle").textContent = copy.sellerCardTitle;
+      document.getElementById("sellerCardText").textContent = copy.sellerCardText;
+      document.getElementById("sellerCardCta").textContent = copy.sellerCardCta;
+      document.getElementById("adminCardTitle").textContent = copy.adminCardTitle;
+      document.getElementById("adminCardText").textContent = copy.adminCardText;
+      document.getElementById("adminCardCta").textContent = copy.adminCardCta;
+      document.getElementById("deliveryCardTitle").textContent = copy.deliveryCardTitle;
+      document.getElementById("deliveryCardText").textContent = copy.deliveryCardText;
+      document.getElementById("deliveryCardCta").textContent = copy.deliveryCardCta;
+      document.getElementById("demoTitle").textContent = copy.demoTitle;
+      document.getElementById("thRole").textContent = copy.thRole;
+      document.getElementById("thUsername").textContent = copy.thUsername;
+      document.getElementById("thPassword").textContent = copy.thPassword;
+      document.getElementById("rowUser").textContent = copy.rowUser;
+      document.getElementById("rowSeller").textContent = copy.rowSeller;
+      document.getElementById("rowAdmin").textContent = copy.rowAdmin;
+      document.getElementById("rowDelivery").textContent = copy.rowDelivery;
+    }
+
+    languageSelect.addEventListener("change", () => {
+      applyLanguage(languageSelect.value);
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== LANG_KEY) return;
+      const nextLanguage = texts[event.newValue] ? event.newValue : "en";
+      if (nextLanguage === languageSelect.value) return;
+      languageSelect.value = nextLanguage;
+      applyLanguage(nextLanguage);
+    });
+
+    const savedLanguage = localStorage.getItem(LANG_KEY);
+    const initialLanguage = texts[savedLanguage] ? savedLanguage : "en";
+    languageSelect.value = initialLanguage;
+    applyLanguage(initialLanguage);
+  </script>
+</body>
+</html>

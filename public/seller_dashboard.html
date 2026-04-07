@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Dashboard | Smart Ration Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #132d22;
+      --bg-2: #2d775f;
+      --surface: rgba(7, 31, 22, 0.77);
+      --surface-2: rgba(7, 35, 26, 0.86);
+      --text: #f5fffa;
+      --muted: #bfdccd;
+      --border: rgba(255, 255, 255, 0.19);
+      --accent: #f2ca4d;
+      --ok: #96ffcb;
+      --danger: #ffc0b8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 16px 34px;
+      font-family: "IBM Plex Sans", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(242, 202, 77, 0.19), transparent 29%),
+        radial-gradient(circle at 80% 20%, rgba(116, 255, 202, 0.15), transparent 30%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2));
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .top {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .title {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.2rem, 2.8vw, 1.8rem);
+    }
+
+    .sub {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .lang-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .lang-wrap select {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      padding: 7px 8px;
+    }
+
+    .lang-wrap option {
+      color: #1b3228;
+    }
+
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn-soft {
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.13);
+    }
+
+    .btn-main {
+      background: linear-gradient(120deg, var(--accent), #ffdf8a);
+      color: #2d3226;
+    }
+
+    .btn-danger {
+      background: linear-gradient(120deg, #ffc0b8, #ffd5cf);
+      color: #4f2624;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .stat-card .label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .stat-card .value {
+      margin-top: 7px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      font-family: "Sora", sans-serif;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 12px;
+    }
+
+    .panel {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.12rem;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 110px;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .row label {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    input[type="number"],
+    input[type="time"],
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 8px;
+      font-size: 0.9rem;
+    }
+
+    input[type="number"] { text-align: right; }
+
+    textarea {
+      min-height: 62px;
+      resize: vertical;
+    }
+
+    .line {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .line label {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .status {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .open {
+      color: #0f4b32;
+      background: #9dffd8;
+    }
+
+    .closed {
+      color: #5a1f18;
+      background: #ffc2ba;
+    }
+
+    .message {
+      min-height: 1.2rem;
+      margin-top: 10px;
+      color: var(--danger);
+      font-size: 0.92rem;
+    }
+
+    .message.ok {
+      color: var(--ok);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+      padding: 8px 6px;
+      vertical-align: top;
+    }
+
+    th {
+      color: #ddf4e6;
+      font-weight: 600;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 1080px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div>
+        <h1 id="title" class="title">Seller Dashboard</h1>
+        <p id="meta" class="sub"></p>
+        <span id="shopStatusBadge" class="status open" style="display:none;"></span>
+      </div>
+      <div class="actions">
+        <div class="lang-wrap">
+          <label id="langLabel" for="languageSelect">Language</label>
+          <select id="languageSelect" aria-label="Language">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="te">Telugu</option>
+          </select>
+        </div>
+        <button id="refreshBtn" class="btn-soft" type="button">Refresh</button>
+        <button id="logoutBtn" class="btn-danger" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="stats">
+      <article class="stat-card">
+        <div id="labelTotalOrders" class="label">Total Orders</div>
+        <div id="ordersValue" class="value">0</div>
+      </article>
+      <article class="stat-card">
+        <div id="labelTotalRevenue" class="label">Total Revenue</div>
+        <div id="revenueValue" class="value">Rs 0</div>
+      </article>
+      <article class="stat-card">
+        <div id="labelRice" class="label">Distributed Rice</div>
+        <div id="riceValue" class="value">0</div>
+      </article>
+      <article class="stat-card">
+        <div id="labelWheat" class="label">Distributed Wheat</div>
+        <div id="wheatValue" class="value">0</div>
+      </article>
+    </section>
+
+    <section class="content">
+      <article class="panel">
+        <h2 id="updateShopStockTitle">Update Shop Stock</h2>
+        <form id="stockForm">
+          <div id="stockRows"></div>
+          <button id="saveStockBtn" class="btn-main" type="submit">Save Stock</button>
+          <div id="stockStatus" class="message"></div>
+        </form>
+      </article>
+
+      <article class="panel">
+        <h2 id="shopTimingsTitle">Shop Timings & Leave</h2>
+        <form id="scheduleForm">
+          <div class="line">
+            <label id="openTimeLabel" for="openTime">Open Time</label>
+            <input id="openTime" type="time" value="09:00">
+          </div>
+          <div class="line">
+            <label id="closeTimeLabel" for="closeTime">Close Time</label>
+            <input id="closeTime" type="time" value="16:00">
+          </div>
+          <label id="closedCheckLabel" class="check">
+            <input id="isClosed" type="checkbox">
+            <span id="closedCheckText">Mark shop as closed (leave)</span>
+          </label>
+          <div class="line">
+            <label id="leaveNoteLabel" for="leaveNote">Leave Note (optional)</label>
+            <textarea id="leaveNote" placeholder="Example: Festival holiday"></textarea>
+          </div>
+          <button id="updateShopStatusBtn" class="btn-main" type="submit">Update Shop Status</button>
+          <div id="scheduleStatus" class="message"></div>
+        </form>
+      </article>
+
+      <article class="panel">
+        <h2 id="recentOrdersTitle">Recent Shop Orders</h2>
+        <div id="ordersWrap" class="muted">Loading...</div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const LANG_KEY = "ration_lang";
+    const SELLER_SESSION_KEY = "ration_seller_session";
+    const session = JSON.parse(localStorage.getItem(SELLER_SESSION_KEY) || "null");
+
+    if (!session || !session.shopId) {
+      window.location.href = "seller_login.html";
+    }
+
+    const stockStatusNode = document.getElementById("stockStatus");
+    const scheduleStatusNode = document.getElementById("scheduleStatus");
+    const stockRows = document.getElementById("stockRows");
+    const ordersWrap = document.getElementById("ordersWrap");
+    const ordersValue = document.getElementById("ordersValue");
+    const revenueValue = document.getElementById("revenueValue");
+    const riceValue = document.getElementById("riceValue");
+    const wheatValue = document.getElementById("wheatValue");
+    const shopStatusBadge = document.getElementById("shopStatusBadge");
+    const languageSelect = document.getElementById("languageSelect");
+
+    let stockKeys = [];
+    let currentLanguage = "en";
+
+    const I18N = {
+      en: {
+        pageTitle: "Seller Dashboard | Smart Ration Shop",
+        langLabel: "Language",
+        refresh: "Refresh",
+        logout: "Logout",
+        totalOrders: "Total Orders",
+        totalRevenue: "Total Revenue",
+        rice: "Distributed Rice",
+        wheat: "Distributed Wheat",
+        updateShopStock: "Update Shop Stock",
+        saveStock: "Save Stock",
+        shopTimings: "Shop Timings & Leave",
+        openTime: "Open Time",
+        closeTime: "Close Time",
+        closedCheck: "Mark shop as closed (leave)",
+        leaveNote: "Leave Note (optional)",
+        leavePlaceholder: "Example: Festival holiday",
+        updateStatus: "Update Shop Status",
+        recentOrders: "Recent Shop Orders",
+        loading: "Loading...",
+        noOrders: "No orders for this shop yet.",
+        statusClosed: "Shop Closed",
+        statusClosedWithNote: "Shop Closed - {{note}}",
+        statusOpen: "Open {{openTime}} - {{closeTime}}",
+        thDate: "Date",
+        thCard: "Card",
+        thItems: "Items",
+        thSlot: "Delivery Slot",
+        thPayment: "Payment",
+        thTotal: "Total",
+        dashboardTitle: "Seller Dashboard - {{name}}",
+        dashboardMeta: "Shop {{shopId}} | Village {{village}}",
+      },
+      hi: {
+        pageTitle: "Seller Dashboard | Smart Ration Shop",
+        langLabel: "Bhasha",
+        refresh: "Refresh",
+        logout: "Logout",
+        totalOrders: "Kul Orders",
+        totalRevenue: "Kul Revenue",
+        rice: "Banta hua Rice",
+        wheat: "Banta hua Wheat",
+        updateShopStock: "Shop Stock Update",
+        saveStock: "Stock Save karein",
+        shopTimings: "Shop Timings aur Leave",
+        openTime: "Khulne ka samay",
+        closeTime: "Band hone ka samay",
+        closedCheck: "Shop ko band mark karein (leave)",
+        leaveNote: "Leave Note (optional)",
+        leavePlaceholder: "Udaharan: Festival holiday",
+        updateStatus: "Shop Status Update karein",
+        recentOrders: "Recent Shop Orders",
+        loading: "Loading...",
+        noOrders: "Is shop ke liye abhi orders nahi hain.",
+        statusClosed: "Shop band",
+        statusClosedWithNote: "Shop band - {{note}}",
+        statusOpen: "Khula {{openTime}} - {{closeTime}}",
+        thDate: "Date",
+        thCard: "Card",
+        thItems: "Items",
+        thSlot: "Delivery Slot",
+        thPayment: "Payment",
+        thTotal: "Total",
+        dashboardTitle: "Seller Dashboard - {{name}}",
+        dashboardMeta: "Shop {{shopId}} | Village {{village}}",
+      },
+      te: {
+        pageTitle: "సెల్లర్ డ్యాష్‌బోర్డ్ | స్మార్ట్ రేషన్ షాప్",
+        langLabel: "భాష",
+        refresh: "రిఫ్రెష్",
+        logout: "లాగౌట్",
+        totalOrders: "మొత్తం ఆర్డర్లు",
+        totalRevenue: "మొత్తం ఆదాయం",
+        rice: "పంపిణీ చేసిన బియ్యం",
+        wheat: "పంపిణీ చేసిన గోధుమ",
+        updateShopStock: "షాప్ స్టాక్ అప్‌డేట్",
+        saveStock: "స్టాక్ సేవ్ చేయండి",
+        shopTimings: "షాప్ సమయాలు & సెలవు",
+        openTime: "తెరవు సమయం",
+        closeTime: "మూసే సమయం",
+        closedCheck: "షాప్‌ను మూసివేసినట్లు గుర్తించండి (సెలవు)",
+        leaveNote: "సెలవు గమనిక (ఐచ్చికం)",
+        leavePlaceholder: "ఉదాహరణ: పండుగ సెలవు",
+        updateStatus: "షాప్ స్థితి అప్‌డేట్",
+        recentOrders: "ఇటీవలి షాప్ ఆర్డర్లు",
+        loading: "లోడ్ అవుతోంది...",
+        noOrders: "ఈ షాప్‌కు ఇప్పటివరకు ఆర్డర్లు లేవు.",
+        statusClosed: "షాప్ మూసివేసింది",
+        statusClosedWithNote: "షాప్ మూసివేసింది - {{note}}",
+        statusOpen: "తెరిచి ఉంది {{openTime}} - {{closeTime}}",
+        thDate: "తేదీ",
+        thCard: "కార్డు",
+        thItems: "వస్తువులు",
+        thSlot: "డెలివరీ స్లాట్",
+        thPayment: "చెల్లింపు",
+        thTotal: "మొత్తం",
+        dashboardTitle: "సెల్లర్ డ్యాష్‌బోర్డ్ - {{name}}",
+        dashboardMeta: "షాప్ {{shopId}} | గ్రామం {{village}}",
+      },
+    };
+
+    function t(key, vars = {}) {
+      const table = I18N[currentLanguage] || I18N.en;
+      const template = table[key] || I18N.en[key] || key;
+      return Object.entries(vars).reduce(
+        (result, [name, value]) => result.replaceAll(`{{${name}}}`, value ?? ""),
+        template
+      );
+    }
+
+    const ITEM_NAMES = {
+      rice: { en: "Rice", hi: "Chawal", te: "బియ్యం" },
+      wheat: { en: "Wheat", hi: "Gehun", te: "గోధుమ" },
+      sugar: { en: "Sugar", hi: "Cheeni", te: "చెక్కెర" },
+      kerosene: { en: "Kerosene", hi: "Kerosene", te: "కిరోసిన్" },
+    };
+
+    function resolveItemKey(itemKey, itemName) {
+      const normalizedKey = String(itemKey || "").trim().toLowerCase();
+      if (ITEM_NAMES[normalizedKey]) return normalizedKey;
+
+      const normalizedName = String(itemName || "")
+        .trim()
+        .toLowerCase()
+        .replaceAll("-", "")
+        .replaceAll(" ", "");
+
+      const aliases = {
+        rice: "rice",
+        chawal: "rice",
+        wheat: "wheat",
+        gehun: "wheat",
+        sugar: "sugar",
+        cheeni: "sugar",
+        kerosene: "kerosene",
+        kerosin: "kerosene",
+      };
+
+      return aliases[normalizedName] || normalizedKey;
+    }
+
+    function getLocalizedItemName(itemKey, fallbackName) {
+      const key = resolveItemKey(itemKey, fallbackName);
+      const names = ITEM_NAMES[key];
+      if (!names) return fallbackName || itemKey || "-";
+      return names[currentLanguage] || names.en;
+    }
+
+    function applyLanguage(lang) {
+      currentLanguage = I18N[lang] ? lang : "en";
+      languageSelect.value = currentLanguage;
+      localStorage.setItem(LANG_KEY, currentLanguage);
+      document.documentElement.lang = currentLanguage;
+      document.title = t("pageTitle");
+      document.getElementById("langLabel").textContent = t("langLabel");
+      document.getElementById("refreshBtn").textContent = t("refresh");
+      document.getElementById("logoutBtn").textContent = t("logout");
+      document.getElementById("labelTotalOrders").textContent = t("totalOrders");
+      document.getElementById("labelTotalRevenue").textContent = t("totalRevenue");
+      document.getElementById("labelRice").textContent = t("rice");
+      document.getElementById("labelWheat").textContent = t("wheat");
+      document.getElementById("updateShopStockTitle").textContent = t("updateShopStock");
+      document.getElementById("saveStockBtn").textContent = t("saveStock");
+      document.getElementById("shopTimingsTitle").textContent = t("shopTimings");
+      document.getElementById("openTimeLabel").textContent = t("openTime");
+      document.getElementById("closeTimeLabel").textContent = t("closeTime");
+      document.getElementById("closedCheckText").textContent = t("closedCheck");
+      document.getElementById("leaveNoteLabel").textContent = t("leaveNote");
+      document.getElementById("leaveNote").placeholder = t("leavePlaceholder");
+      document.getElementById("updateShopStatusBtn").textContent = t("updateStatus");
+      document.getElementById("recentOrdersTitle").textContent = t("recentOrders");
+      if (ordersWrap.textContent.trim() === "Loading...") {
+        ordersWrap.textContent = t("loading");
+      }
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    function formatDate(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "-";
+      return date.toLocaleString();
+    }
+
+    function renderShopStatus(status) {
+      shopStatusBadge.style.display = "inline-block";
+      if (status.isClosed) {
+        shopStatusBadge.className = "status closed";
+        shopStatusBadge.textContent = status.leaveNote
+          ? t("statusClosedWithNote", { note: status.leaveNote })
+          : t("statusClosed");
+      } else {
+        shopStatusBadge.className = "status open";
+        shopStatusBadge.textContent = t("statusOpen", {
+          openTime: status.openTime,
+          closeTime: status.closeTime,
+        });
+      }
+
+      document.getElementById("openTime").value = status.openTime || "09:00";
+      document.getElementById("closeTime").value = status.closeTime || "16:00";
+      document.getElementById("isClosed").checked = Boolean(status.isClosed);
+      document.getElementById("leaveNote").value = status.leaveNote || "";
+    }
+
+    function renderOrders(orders) {
+      if (!orders.length) {
+        ordersWrap.innerHTML = `<p class="muted">${escapeHtml(t("noOrders"))}</p>`;
+        return;
+      }
+
+      const rows = orders.map((order) => {
+        const itemLine = (order.items || [])
+          .map((line) => `${getLocalizedItemName(line.itemKey, line.name)} (${line.qty})`)
+          .join(", ");
+        return `
+          <tr>
+            <td>${formatDate(order.date)}</td>
+            <td>${escapeHtml(order.rationCard)}</td>
+            <td>${escapeHtml(itemLine)}</td>
+            <td>${escapeHtml(order.deliverySlot || "-")}</td>
+            <td>${escapeHtml(order.paymentMethod || "-")}</td>
+            <td>Rs ${order.total}</td>
+          </tr>
+        `;
+      }).join("");
+
+      ordersWrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>${t("thDate")}</th>
+              <th>${t("thCard")}</th>
+              <th>${t("thItems")}</th>
+              <th>${t("thSlot")}</th>
+              <th>${t("thPayment")}</th>
+              <th>${t("thTotal")}</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function renderStock(stock, items) {
+      stockKeys = items.map((item) => item.key);
+      stockRows.innerHTML = items.map((item) => `
+        <div class="row">
+          <label for="stock_${item.key}">${escapeHtml(getLocalizedItemName(item.key, item.name))}</label>
+          <input id="stock_${item.key}" type="number" min="0" value="${stock[item.key] ?? 0}">
+        </div>
+      `).join("");
+    }
+
+    async function loadDashboard() {
+      stockStatusNode.textContent = "";
+      scheduleStatusNode.textContent = "";
+      stockStatusNode.classList.remove("ok");
+      scheduleStatusNode.classList.remove("ok");
+
+      try {
+        const [stockRes, summaryRes, ordersRes] = await Promise.all([
+          fetch(`/seller/stock/${encodeURIComponent(session.shopId)}`),
+          fetch(`/seller/summary/${encodeURIComponent(session.shopId)}`),
+          fetch(`/seller/orders/${encodeURIComponent(session.shopId)}`),
+        ]);
+
+        const stockData = await stockRes.json();
+        const summaryData = await summaryRes.json();
+        const ordersData = await ordersRes.json();
+
+        if (!stockRes.ok || !stockData.ok) {
+          throw new Error(stockData.message || "Unable to fetch stock.");
+        }
+        if (!summaryRes.ok || !summaryData.ok) {
+          throw new Error(summaryData.message || "Unable to fetch summary.");
+        }
+        if (!ordersRes.ok || !ordersData.ok) {
+          throw new Error(ordersData.message || "Unable to fetch shop orders.");
+        }
+
+        document.getElementById("title").textContent = t("dashboardTitle", {
+          name: stockData.seller.name,
+        });
+        document.getElementById("meta").textContent = t("dashboardMeta", {
+          shopId: stockData.seller.shopId,
+          village: stockData.seller.village,
+        });
+        renderShopStatus(stockData.seller.status || {});
+
+        renderStock(stockData.stock, stockData.items);
+        renderOrders(ordersData.orders);
+
+        ordersValue.textContent = summaryData.summary.orderCount;
+        revenueValue.textContent = `Rs ${summaryData.summary.totalRevenue}`;
+        riceValue.textContent = summaryData.summary.totalDistributed.rice || 0;
+        wheatValue.textContent = summaryData.summary.totalDistributed.wheat || 0;
+      } catch (error) {
+        stockStatusNode.textContent = error.message;
+      }
+    }
+
+    document.getElementById("stockForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      stockStatusNode.textContent = "";
+      stockStatusNode.classList.remove("ok");
+
+      const payload = {};
+      for (const key of stockKeys) {
+        const input = document.getElementById(`stock_${key}`);
+        const value = Number.parseInt(input.value, 10);
+        payload[key] = Number.isFinite(value) && value >= 0 ? value : 0;
+      }
+
+      try {
+        const response = await fetch(`/seller/stock/${encodeURIComponent(session.shopId)}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Unable to update stock.");
+        }
+
+        stockStatusNode.textContent = data.message;
+        stockStatusNode.classList.add("ok");
+        await loadDashboard();
+      } catch (error) {
+        stockStatusNode.textContent = error.message;
+      }
+    });
+
+    document.getElementById("scheduleForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      scheduleStatusNode.textContent = "";
+      scheduleStatusNode.classList.remove("ok");
+
+      const payload = {
+        openTime: document.getElementById("openTime").value || "09:00",
+        closeTime: document.getElementById("closeTime").value || "16:00",
+        isClosed: document.getElementById("isClosed").checked,
+        leaveNote: document.getElementById("leaveNote").value.trim(),
+      };
+
+      try {
+        const response = await fetch(`/seller/shop-status/${encodeURIComponent(session.shopId)}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Unable to update shop status.");
+        }
+
+        scheduleStatusNode.textContent = data.message;
+        scheduleStatusNode.classList.add("ok");
+        renderShopStatus(data.status || payload);
+      } catch (error) {
+        scheduleStatusNode.textContent = error.message;
+      }
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", loadDashboard);
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem(SELLER_SESSION_KEY);
+      window.location.href = "seller_login.html";
+    });
+
+    const savedLanguage = localStorage.getItem(LANG_KEY);
+    applyLanguage(I18N[savedLanguage] ? savedLanguage : "en");
+    languageSelect.addEventListener("change", () => {
+      applyLanguage(languageSelect.value);
+      loadDashboard();
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== LANG_KEY) return;
+      const nextLanguage = I18N[event.newValue] ? event.newValue : "en";
+      if (nextLanguage === currentLanguage) return;
+      applyLanguage(nextLanguage);
+      loadDashboard();
+    });
+
+    loadDashboard();
+  </script>
+</body>
+</html>

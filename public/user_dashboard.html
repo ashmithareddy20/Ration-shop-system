@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard | Smart Ration Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #081e34;
+      --bg-2: #1e4a70;
+      --surface: rgba(8, 25, 44, 0.72);
+      --surface-2: rgba(9, 31, 53, 0.85);
+      --text: #f4f9ff;
+      --muted: #b9d2e9;
+      --accent: #35d0ba;
+      --danger: #ffb4ac;
+      --border: rgba(255, 255, 255, 0.2);
+      --ok: #8fffd5;
+      --warn: #ffd58b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "IBM Plex Sans", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 5%, rgba(248, 190, 67, 0.2), transparent 30%),
+        radial-gradient(circle at 90% 30%, rgba(53, 208, 186, 0.2), transparent 32%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      padding: 26px 18px 36px;
+    }
+
+    .wrap {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+      animation: fadeUp 0.55s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .top {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .title {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.25rem, 2.7vw, 1.9rem);
+    }
+
+    .sub {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .lang-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .lang-wrap select {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      padding: 7px 8px;
+    }
+
+    .lang-wrap option {
+      color: #1a2f49;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-soft {
+      background: rgba(255, 255, 255, 0.14);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-main {
+      background: linear-gradient(120deg, var(--accent), #72f8df);
+      color: #063232;
+    }
+
+    .btn-danger {
+      background: linear-gradient(120deg, #ffb4ac, #ffd3cd);
+      color: #492120;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.05rem;
+    }
+
+    .kv {
+      margin: 6px 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.5;
+    }
+
+    .shop-badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .shop-open {
+      color: #0f4b32;
+      background: #9dffd8;
+    }
+
+    .shop-closed {
+      color: #5a1f18;
+      background: #ffc2ba;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 14px;
+    }
+
+    .panel {
+      background: var(--surface-2);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.2rem;
+    }
+
+    .stock-row {
+      display: grid;
+      grid-template-columns: 62px 1fr 84px;
+      gap: 10px;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 10px 0;
+    }
+
+    .stock-row:last-child {
+      border-bottom: 0;
+    }
+
+    .item-img {
+      width: 56px;
+      height: 42px;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      object-fit: cover;
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    .stock-name {
+      font-weight: 600;
+    }
+
+    .stock-meta {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .qty-input,
+    .field-select {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      padding: 8px;
+    }
+
+    .field-select option {
+      color: #111111 !important;
+      background: #ffffff !important;
+    }
+
+    .qty-input { text-align: right; }
+
+    .extra-fields {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+    }
+
+    .extra-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .extra-field label {
+      font-size: 0.86rem;
+      color: var(--muted);
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: var(--warn);
+      font-size: 0.86rem;
+    }
+
+    .status {
+      min-height: 1.2rem;
+      margin-top: 10px;
+      font-size: 0.92rem;
+      color: var(--danger);
+    }
+
+    .status.ok {
+      color: var(--ok);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 9px 7px;
+      vertical-align: top;
+    }
+
+    th {
+      color: #d8ebff;
+      font-weight: 600;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 920px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+      .stock-row {
+        grid-template-columns: 52px 1fr 74px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div>
+        <h1 id="welcome" class="title">User Dashboard</h1>
+        <p id="shopTag" class="sub"></p>
+      </div>
+      <div class="actions">
+        <div class="lang-wrap">
+          <label id="langLabel" for="languageSelect">Language</label>
+          <select id="languageSelect" aria-label="Language">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="te">Telugu</option>
+          </select>
+        </div>
+        <button id="refreshBtn" class="btn-soft" type="button">Refresh</button>
+        <button id="logoutBtn" class="btn-danger" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="grid">
+      <article class="card">
+        <h3 id="beneficiaryTitle">Beneficiary</h3>
+        <p id="profileCard" class="kv">Loading...</p>
+      </article>
+      <article class="card">
+        <h3 id="assignedShopTitle">Assigned Shop</h3>
+        <p id="assignedShopCard" class="kv">Loading...</p>
+        <span id="shopBadge" class="shop-badge shop-open" style="display:none;"></span>
+      </article>
+      <article class="card">
+        <h3 id="deliveryPersonTitle">Delivery Person</h3>
+        <p id="deliveryCard" class="kv">Loading...</p>
+      </article>
+      <article class="card">
+        <h3 id="monthlyWindowTitle">Monthly Window</h3>
+        <p id="monthCard" class="kv">Loading...</p>
+      </article>
+    </section>
+
+    <section class="content">
+      <article class="panel">
+        <h2 id="newOrderTitle">Place New Order</h2>
+        <form id="orderForm">
+          <div id="stockInputs"></div>
+
+          <div class="extra-fields">
+            <div class="extra-field">
+              <label id="paymentMethodLabel" for="paymentMethod">Online Payment Method</label>
+              <select id="paymentMethod" class="field-select"></select>
+            </div>
+            <div class="extra-field">
+              <label id="deliverySlotLabel" for="deliverySlot">Home Availability Slot (09:00-16:00)</label>
+              <select id="deliverySlot" class="field-select"></select>
+            </div>
+          </div>
+
+          <p id="orderHint" class="hint">Choose your home-available slot. Delivery will be attempted in this window.</p>
+          <button id="confirmBtn" class="btn-main" type="submit">Pay Online & Confirm Order</button>
+          <div id="orderStatus" class="status"></div>
+        </form>
+      </article>
+
+      <article class="panel">
+        <h2 id="orderHistoryTitle">Order History</h2>
+        <div id="historyWrap" class="muted">Loading...</div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const LANG_KEY = "ration_lang";
+    const USER_SESSION_KEY = "ration_user_session";
+    const USER_SHOP_KEY = "ration_user_shop";
+    const session = JSON.parse(localStorage.getItem(USER_SESSION_KEY) || "null");
+    const cachedShop = JSON.parse(localStorage.getItem(USER_SHOP_KEY) || "null");
+
+    if (!session || !session.rationCard) {
+      window.location.href = "user_login.html";
+    }
+
+    const orderForm = document.getElementById("orderForm");
+    const stockInputs = document.getElementById("stockInputs");
+    const paymentMethodSelect = document.getElementById("paymentMethod");
+    const deliverySlotSelect = document.getElementById("deliverySlot");
+    const confirmBtn = document.getElementById("confirmBtn");
+    const orderStatus = document.getElementById("orderStatus");
+    const welcome = document.getElementById("welcome");
+    const shopTag = document.getElementById("shopTag");
+    const profileCard = document.getElementById("profileCard");
+    const assignedShopCard = document.getElementById("assignedShopCard");
+    const deliveryCard = document.getElementById("deliveryCard");
+    const monthCard = document.getElementById("monthCard");
+    const historyWrap = document.getElementById("historyWrap");
+    const shopBadge = document.getElementById("shopBadge");
+    const languageSelect = document.getElementById("languageSelect");
+
+    let latestItems = [];
+    let latestMonthKey = "";
+    let currentShopStatus = { isClosed: false, openTime: "09:00", closeTime: "16:00", leaveNote: "" };
+    let currentLanguage = "en";
+
+    const I18N = {
+      en: {
+        pageTitle: "User Dashboard | Smart Ration Shop",
+        langLabel: "Language",
+        refresh: "Refresh",
+        logout: "Logout",
+        beneficiaryTitle: "Beneficiary",
+        assignedShopTitle: "Assigned Shop",
+        deliveryPersonTitle: "Delivery Person",
+        monthlyWindowTitle: "Monthly Window",
+        newOrderTitle: "Place New Order",
+        paymentMethodLabel: "Online Payment Method",
+        deliverySlotLabel: "Home Availability Slot (09:00-16:00)",
+        orderHint: "Choose your home-available slot. Delivery will be attempted in this window.",
+        confirmBtn: "Pay Online & Confirm Order",
+        orderHistoryTitle: "Order History",
+        shopClosedBadge: "Shop is Closed",
+        shopOpenBadge: "Open: {{openTime}} - {{closeTime}}",
+        shopClosedWithNote: "Shop is closed: {{note}}",
+        shopClosedNow: "Shop is currently closed.",
+        noOrdersFound: "No orders found yet.",
+        thDate: "Date",
+        thShop: "Shop",
+        thItems: "Items",
+        thSlot: "Delivery Slot",
+        thPayment: "Payment",
+        thStatus: "Status",
+        thDeliveryPerson: "Delivery Person",
+        thTotal: "Total",
+        price: "Price",
+        stock: "Stock",
+        monthlyLimit: "Monthly Limit",
+        notAvailableMonth: "Not available this month",
+        unableProfile: "Unable to fetch profile.",
+        unableStockList: "Unable to fetch stock list.",
+        unableOrderHistory: "Unable to fetch order history.",
+        welcome: "Welcome, {{name}}",
+        shopMeta: "Shop {{shopId}} - {{name}}",
+        noShopAssigned: "No shop assigned",
+        profileCard: "Card: {{card}} | Village: {{village}}",
+        assignedShopCard: "{{name}} ({{shopId}}) - {{village}} | Timings: {{openTime}}-{{closeTime}}",
+        noShopMapping: "No shop mapping available.",
+        deliveryAssigned: "{{name}} | {{phone}} | Village {{village}}",
+        deliveryMissing: "Delivery person not assigned for your village yet.",
+        monthConfig: "Current month configuration: {{monthKey}}",
+        orderingDisabled: "Shop is currently closed, so ordering is disabled.",
+        unablePlaceOrder: "Unable to place order.",
+        orderSuccess: "{{message}} Payment Ref: {{reference}}",
+      },
+      hi: {
+        pageTitle: "User Dashboard | Smart Ration Shop",
+        langLabel: "भाषा",
+        refresh: "रीफ्रेश",
+        logout: "लॉगआउट",
+        beneficiaryTitle: "लाभार्थी",
+        assignedShopTitle: "आवंटित दुकान",
+        deliveryPersonTitle: "डिलीवरी व्यक्ति",
+        monthlyWindowTitle: "मासिक विंडो",
+        newOrderTitle: "नया ऑर्डर करें",
+        paymentMethodLabel: "ऑनलाइन भुगतान विधि",
+        deliverySlotLabel: "घर पर उपलब्ध समय (09:00-16:00)",
+        orderHint: "घर पर उपलब्ध स्लॉट चुनें। इसी समय विंडो में डिलीवरी की कोशिश होगी।",
+        confirmBtn: "ऑनलाइन भुगतान करके ऑर्डर कन्फर्म करें",
+        orderHistoryTitle: "ऑर्डर इतिहास",
+        shopClosedBadge: "दुकान बंद है",
+        shopOpenBadge: "खुला: {{openTime}} - {{closeTime}}",
+        shopClosedWithNote: "दुकान बंद है: {{note}}",
+        shopClosedNow: "दुकान अभी बंद है।",
+        noOrdersFound: "अभी तक कोई ऑर्डर नहीं मिला।",
+        thDate: "तारीख",
+        thShop: "दुकान",
+        thItems: "सामान",
+        thSlot: "डिलीवरी स्लॉट",
+        thPayment: "भुगतान",
+        thStatus: "स्थिति",
+        thDeliveryPerson: "डिलीवरी व्यक्ति",
+        thTotal: "कुल",
+        price: "कीमत",
+        stock: "स्टॉक",
+        monthlyLimit: "मासिक सीमा",
+        notAvailableMonth: "इस महीने उपलब्ध नहीं",
+        unableProfile: "प्रोफाइल प्राप्त नहीं हो पाई।",
+        unableStockList: "स्टॉक सूची प्राप्त नहीं हो पाई।",
+        unableOrderHistory: "ऑर्डर इतिहास प्राप्त नहीं हो पाया।",
+        welcome: "स्वागत है, {{name}}",
+        shopMeta: "दुकान {{shopId}} - {{name}}",
+        noShopAssigned: "कोई दुकान आवंटित नहीं है",
+        profileCard: "कार्ड: {{card}} | गांव: {{village}}",
+        assignedShopCard: "{{name}} ({{shopId}}) - {{village}} | समय: {{openTime}}-{{closeTime}}",
+        noShopMapping: "दुकान मैपिंग उपलब्ध नहीं है।",
+        deliveryAssigned: "{{name}} | {{phone}} | गांव {{village}}",
+        deliveryMissing: "आपके गांव के लिए अभी डिलीवरी व्यक्ति आवंटित नहीं है।",
+        monthConfig: "वर्तमान महीने की कॉन्फ़िगरेशन: {{monthKey}}",
+        orderingDisabled: "दुकान बंद है, इसलिए ऑर्डर नहीं किया जा सकता।",
+        unablePlaceOrder: "ऑर्डर नहीं हो पाया।",
+        orderSuccess: "{{message}} भुगतान संदर्भ: {{reference}}",
+      },
+      te: {
+        pageTitle: "యూజర్ డ్యాష్‌బోర్డ్ | స్మార్ట్ రేషన్ షాప్",
+        langLabel: "భాష",
+        refresh: "రిఫ్రెష్",
+        logout: "లాగౌట్",
+        beneficiaryTitle: "లబ్ధిదారు",
+        assignedShopTitle: "కేటాయించిన షాప్",
+        deliveryPersonTitle: "డెలివరీ వ్యక్తి",
+        monthlyWindowTitle: "మాసపు విండో",
+        newOrderTitle: "కొత్త ఆర్డర్ చేయండి",
+        paymentMethodLabel: "ఆన్‌లైన్ చెల్లింపు విధానం",
+        deliverySlotLabel: "ఇంట్లో అందుబాటు స్లాట్ (09:00-16:00)",
+        orderHint: "మీరు ఇంట్లో ఉండే సమయాన్ని ఎంచుకోండి. ఆ సమయపు విండోలో డెలివరీ చేయబడుతుంది.",
+        confirmBtn: "ఆన్‌లైన్ చెల్లించి ఆర్డర్ నిర్ధారించండి",
+        orderHistoryTitle: "ఆర్డర్ చరిత్ర",
+        shopClosedBadge: "షాప్ మూసివేయబడి ఉంది",
+        shopOpenBadge: "తెరిచి ఉంది: {{openTime}} - {{closeTime}}",
+        shopClosedWithNote: "షాప్ మూసివేయబడింది: {{note}}",
+        shopClosedNow: "షాప్ ప్రస్తుతం మూసివేయబడి ఉంది.",
+        noOrdersFound: "ఇప్పటివరకు ఆర్డర్లు లేవు.",
+        thDate: "తేదీ",
+        thShop: "షాప్",
+        thItems: "వస్తువులు",
+        thSlot: "డెలివరీ స్లాట్",
+        thPayment: "చెల్లింపు",
+        thStatus: "స్థితి",
+        thDeliveryPerson: "డెలివరీ వ్యక్తి",
+        thTotal: "మొత్తం",
+        price: "ధర",
+        stock: "స్టాక్",
+        monthlyLimit: "మాసపు పరిమితి",
+        notAvailableMonth: "ఈ నెలలో అందుబాటులో లేదు",
+        unableProfile: "ప్రొఫైల్ తెచ్చుకోలేకపోయాం.",
+        unableStockList: "స్టాక్ జాబితా తెచ్చుకోలేకపోయాం.",
+        unableOrderHistory: "ఆర్డర్ చరిత్ర తెచ్చుకోలేకపోయాం.",
+        welcome: "స్వాగతం, {{name}}",
+        shopMeta: "షాప్ {{shopId}} - {{name}}",
+        noShopAssigned: "షాప్ కేటాయించబడలేదు",
+        profileCard: "కార్డు: {{card}} | గ్రామం: {{village}}",
+        assignedShopCard: "{{name}} ({{shopId}}) - {{village}} | సమయం: {{openTime}}-{{closeTime}}",
+        noShopMapping: "షాప్ మ్యాపింగ్ అందుబాటులో లేదు.",
+        deliveryAssigned: "{{name}} | {{phone}} | గ్రామం {{village}}",
+        deliveryMissing: "మీ గ్రామానికి డెలివరీ వ్యక్తి ఇంకా కేటాయించబడలేదు.",
+        monthConfig: "ప్రస్తుత నెల అమరిక: {{monthKey}}",
+        orderingDisabled: "షాప్ మూసి ఉండటంతో ఆర్డర్ చేయడం నిలిపివేయబడింది.",
+        unablePlaceOrder: "ఆర్డర్ చేయలేకపోయాం.",
+        orderSuccess: "{{message}} చెల్లింపు రిఫ్: {{reference}}",
+      },
+    };
+
+    function t(key, vars = {}) {
+      const table = I18N[currentLanguage] || I18N.en;
+      const template = table[key] || I18N.en[key] || key;
+      return Object.entries(vars).reduce(
+        (result, [name, value]) => result.replaceAll(`{{${name}}}`, value ?? ""),
+        template
+      );
+    }
+
+    const ITEM_NAMES = {
+      rice: { en: "Rice", hi: "चावल", te: "బియ్యం" },
+      wheat: { en: "Wheat", hi: "गेहूं", te: "గోధుమ" },
+      sugar: { en: "Sugar", hi: "चीनी", te: "చెక్కెర" },
+      kerosene: { en: "Kerosene", hi: "केरोसिन", te: "కిరోసిన్" },
+    };
+
+    function resolveItemKey(itemKey, itemName) {
+      const normalizedKey = String(itemKey || "").trim().toLowerCase();
+      if (ITEM_NAMES[normalizedKey]) return normalizedKey;
+
+      const normalizedName = String(itemName || "")
+        .trim()
+        .toLowerCase()
+        .replaceAll("-", "")
+        .replaceAll(" ", "");
+
+      const aliases = {
+        rice: "rice",
+        chawal: "rice",
+        wheat: "wheat",
+        gehun: "wheat",
+        sugar: "sugar",
+        cheeni: "sugar",
+        kerosene: "kerosene",
+        kerosin: "kerosene",
+      };
+
+      return aliases[normalizedName] || normalizedKey;
+    }
+
+    function getLocalizedItemName(itemKey, fallbackName) {
+      const key = resolveItemKey(itemKey, fallbackName);
+      const names = ITEM_NAMES[key];
+      if (!names) return fallbackName || itemKey || "-";
+      return names[currentLanguage] || names.en;
+    }
+
+    const VILLAGE_MAP = {
+      te: {
+        kothapalli: "కోతపల్లి",
+        ramapuram: "రామాపురం",
+        madhavaram: "మాధవరం",
+      },
+      hi: {
+        kothapalli: "कोतापल्ली",
+        ramapuram: "रामापुरम",
+        madhavaram: "माधवरम",
+      },
+    };
+
+    const NAME_MAP = {
+      te: {
+        "mahesh kumar": "మహేష్ కుమార్",
+        "ravi kumar": "రవి కుమార్",
+        "ramu delivery": "రాము డెలివరీ",
+        "sanjay delivery": "సంజయ్ డెలివరీ",
+        "vijay delivery": "విజయ్ డెలివరీ",
+      },
+      hi: {
+        "mahesh kumar": "महेश कुमार",
+        "ravi kumar": "रवि कुमार",
+        "ramu delivery": "रामू डिलीवरी",
+        "sanjay delivery": "संजय डिलीवरी",
+        "vijay delivery": "विजय डिलीवरी",
+      },
+    };
+
+    function localizeVillage(village) {
+      const raw = String(village || "").trim();
+      if (!raw || (currentLanguage !== "te" && currentLanguage !== "hi")) return raw;
+      const map = VILLAGE_MAP[currentLanguage] || {};
+      return map[raw.toLowerCase()] || raw;
+    }
+
+    function localizeName(name) {
+      const raw = String(name || "").trim();
+      if (!raw || (currentLanguage !== "te" && currentLanguage !== "hi")) return raw;
+      const lower = raw.toLowerCase();
+      const map = NAME_MAP[currentLanguage] || {};
+      if (map[lower]) return map[lower];
+      if (currentLanguage === "te") return raw.replace(/\bDelivery\b/gi, "డెలివరీ");
+      if (currentLanguage === "hi") return raw.replace(/\bDelivery\b/gi, "डिलीवरी");
+      return raw;
+    }
+
+    function applyLanguage(lang) {
+      currentLanguage = I18N[lang] ? lang : "en";
+      languageSelect.value = currentLanguage;
+      localStorage.setItem(LANG_KEY, currentLanguage);
+      document.documentElement.lang = currentLanguage;
+      document.title = t("pageTitle");
+      document.getElementById("langLabel").textContent = t("langLabel");
+      document.getElementById("refreshBtn").textContent = t("refresh");
+      document.getElementById("logoutBtn").textContent = t("logout");
+      document.getElementById("beneficiaryTitle").textContent = t("beneficiaryTitle");
+      document.getElementById("assignedShopTitle").textContent = t("assignedShopTitle");
+      document.getElementById("deliveryPersonTitle").textContent = t("deliveryPersonTitle");
+      document.getElementById("monthlyWindowTitle").textContent = t("monthlyWindowTitle");
+      document.getElementById("newOrderTitle").textContent = t("newOrderTitle");
+      document.getElementById("paymentMethodLabel").textContent = t("paymentMethodLabel");
+      document.getElementById("deliverySlotLabel").textContent = t("deliverySlotLabel");
+      document.getElementById("orderHint").textContent = t("orderHint");
+      document.getElementById("confirmBtn").textContent = t("confirmBtn");
+      document.getElementById("orderHistoryTitle").textContent = t("orderHistoryTitle");
+    }
+
+    function formatDate(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "-";
+      return date.toLocaleString();
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    function setSelectOptions(node, values) {
+      node.innerHTML = values.map((value) => `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`).join("");
+      Array.from(node.options).forEach((option) => {
+        option.style.color = "#111111";
+        option.style.backgroundColor = "#ffffff";
+      });
+    }
+
+    function renderShopStatus(status) {
+      currentShopStatus = status || currentShopStatus;
+      if (!status) {
+        shopBadge.style.display = "none";
+        return;
+      }
+
+      shopBadge.style.display = "inline-block";
+      if (status.isClosed) {
+        shopBadge.className = "shop-badge shop-closed";
+        shopBadge.textContent = t("shopClosedBadge");
+      } else {
+        shopBadge.className = "shop-badge shop-open";
+        shopBadge.textContent = t("shopOpenBadge", {
+          openTime: status.openTime,
+          closeTime: status.closeTime,
+        });
+      }
+
+      confirmBtn.disabled = Boolean(status.isClosed);
+      if (status.isClosed) {
+        orderStatus.textContent = status.leaveNote
+          ? t("shopClosedWithNote", { note: status.leaveNote })
+          : t("shopClosedNow");
+      }
+    }
+
+    function renderItems(items) {
+      latestItems = items;
+      stockInputs.innerHTML = items.map((item) => `
+        <div class="stock-row">
+          <img class="item-img" src="${escapeHtml(item.image || "")}" alt="${escapeHtml(getLocalizedItemName(item.key, item.name))}">
+          <div>
+            <div class="stock-name">${escapeHtml(getLocalizedItemName(item.key, item.name))}</div>
+            <div class="stock-meta">
+              ${t("price")}: Rs ${item.price} | ${t("stock")}: ${item.availableQty} | ${t("monthlyLimit")}: ${item.monthlyLimit}
+              ${item.isAvailable ? "" : `<br><strong>${t("notAvailableMonth")}</strong>`}
+            </div>
+          </div>
+          <input class="qty-input" type="number" id="qty_${item.key}" min="0" max="${item.availableQty}" value="0" ${item.isAvailable ? "" : "disabled"}>
+        </div>
+      `).join("");
+    }
+
+    function renderHistory(orders) {
+      if (!orders.length) {
+        historyWrap.innerHTML = `<p class="muted">${escapeHtml(t("noOrdersFound"))}</p>`;
+        return;
+      }
+
+      const rows = orders.map((order) => {
+        const items = (order.items || [])
+          .map((line) => `${getLocalizedItemName(line.itemKey, line.name)} (${line.qty})`)
+          .join(", ");
+        const delivery = order.deliveryPerson?.name
+          ? `${localizeName(order.deliveryPerson.name)} (${order.deliveryPerson.phone || "-"})`
+          : "-";
+        return `
+          <tr>
+            <td>${formatDate(order.date)}</td>
+            <td>${escapeHtml(order.shopId)}</td>
+            <td>${escapeHtml(items)}</td>
+            <td>${escapeHtml(order.deliverySlot || "-")}</td>
+            <td>${escapeHtml(order.paymentMethod || "-")}</td>
+            <td>${escapeHtml(order.paymentStatus || "-")}</td>
+            <td>${escapeHtml(delivery)}</td>
+            <td>Rs ${order.total}</td>
+          </tr>
+        `;
+      }).join("");
+
+      historyWrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>${t("thDate")}</th>
+              <th>${t("thShop")}</th>
+              <th>${t("thItems")}</th>
+              <th>${t("thSlot")}</th>
+              <th>${t("thPayment")}</th>
+              <th>${t("thStatus")}</th>
+              <th>${t("thDeliveryPerson")}</th>
+              <th>${t("thTotal")}</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    async function loadDashboard() {
+      orderStatus.textContent = "";
+      orderStatus.classList.remove("ok");
+
+      try {
+        const [profileRes, itemsRes, ordersRes] = await Promise.all([
+          fetch(`/user/profile/${encodeURIComponent(session.rationCard)}`),
+          fetch(`/user/items/${encodeURIComponent(session.rationCard)}`),
+          fetch(`/user/orders/${encodeURIComponent(session.rationCard)}`),
+        ]);
+
+        const profileData = await profileRes.json();
+        const itemsData = await itemsRes.json();
+        const ordersData = await ordersRes.json();
+
+        if (!profileRes.ok || !profileData.ok) {
+          throw new Error(profileData.message || t("unableProfile"));
+        }
+        if (!itemsRes.ok || !itemsData.ok) {
+          throw new Error(itemsData.message || t("unableStockList"));
+        }
+        if (!ordersRes.ok || !ordersData.ok) {
+          throw new Error(ordersData.message || t("unableOrderHistory"));
+        }
+
+        latestMonthKey = itemsData.monthKey || "";
+        const activeShop = profileData.assignedShop || itemsData.shop || cachedShop;
+
+        welcome.textContent = t("welcome", { name: localizeName(profileData.user.name) });
+        shopTag.textContent = activeShop
+          ? t("shopMeta", {
+              shopId: activeShop.shopId,
+              name: localizeName(activeShop.name || "Assigned seller"),
+            })
+          : t("noShopAssigned");
+        profileCard.textContent = t("profileCard", {
+          card: profileData.user.rationCard,
+          village: localizeVillage(profileData.user.village),
+        });
+
+        if (activeShop) {
+          const status = activeShop.status || itemsData.shop?.status;
+          assignedShopCard.textContent = t("assignedShopCard", {
+            name: localizeName(activeShop.name || "Seller"),
+            shopId: activeShop.shopId,
+            village: localizeVillage(activeShop.village || ""),
+            openTime: status?.openTime || "09:00",
+            closeTime: status?.closeTime || "16:00",
+          });
+          renderShopStatus(status);
+        } else {
+          assignedShopCard.textContent = t("noShopMapping");
+        }
+
+        if (profileData.deliveryPerson) {
+          deliveryCard.textContent = t("deliveryAssigned", {
+            name: localizeName(profileData.deliveryPerson.name),
+            phone: profileData.deliveryPerson.phone || "-",
+            village: localizeVillage(profileData.deliveryPerson.village),
+          });
+        } else {
+          deliveryCard.textContent = t("deliveryMissing");
+        }
+
+        monthCard.textContent = t("monthConfig", { monthKey: itemsData.monthKey });
+        renderItems(itemsData.items || []);
+
+        setSelectOptions(paymentMethodSelect, itemsData.paymentMethods || profileData.paymentMethods || ["UPI", "Card", "NetBanking"]);
+        setSelectOptions(deliverySlotSelect, itemsData.deliverySlots || profileData.deliverySlots || []);
+
+        renderHistory(ordersData.orders || []);
+      } catch (error) {
+        orderStatus.textContent = error.message;
+      }
+    }
+
+    orderForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      orderStatus.textContent = "";
+      orderStatus.classList.remove("ok");
+
+      if (currentShopStatus.isClosed) {
+        orderStatus.textContent = t("orderingDisabled");
+        return;
+      }
+
+      const quantities = {};
+      for (const item of latestItems) {
+        const input = document.getElementById(`qty_${item.key}`);
+        const value = Number.parseInt(input?.value || "0", 10);
+        quantities[item.key] = Number.isFinite(value) && value >= 0 ? value : 0;
+      }
+
+      try {
+        const response = await fetch("/user/order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            rationCard: session.rationCard,
+            monthKey: latestMonthKey,
+            paymentMethod: paymentMethodSelect.value,
+            deliverySlot: deliverySlotSelect.value,
+            quantities,
+          }),
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || t("unablePlaceOrder"));
+        }
+
+        orderStatus.textContent = t("orderSuccess", {
+          message: data.message,
+          reference: data.order.paymentReference || "-",
+        });
+        orderStatus.classList.add("ok");
+        await loadDashboard();
+      } catch (error) {
+        orderStatus.textContent = error.message;
+      }
+    });
+
+    const savedLanguage = localStorage.getItem(LANG_KEY);
+    applyLanguage(I18N[savedLanguage] ? savedLanguage : "en");
+    languageSelect.addEventListener("change", () => {
+      applyLanguage(languageSelect.value);
+      loadDashboard();
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== LANG_KEY) return;
+      const nextLanguage = I18N[event.newValue] ? event.newValue : "en";
+      if (nextLanguage === currentLanguage) return;
+      applyLanguage(nextLanguage);
+      loadDashboard();
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", loadDashboard);
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem(USER_SESSION_KEY);
+      localStorage.removeItem(USER_SHOP_KEY);
+      window.location.href = "user_login.html";
+    });
+
+    loadDashboard();
+  </script>
+</body>
+</html>

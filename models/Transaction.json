@@ -1,0 +1,78 @@
+[
+  {
+    "rationCard": "RC101",
+    "shopId": "S01",
+    "rice": 5,
+    "wheat": 3,
+    "sugar": 1,
+    "date": "2026-03-20"
+  },
+  {
+    "rationCard": "RC102",
+    "shopId": "S02",
+    "rice": 4,
+    "wheat": 2,
+    "sugar": 1,
+    "date": "2026-03-21"
+  },
+  {
+    "rationCard": "RC103",
+    "shopId": "S03",
+    "rice": 6,
+    "wheat": 3,
+    "sugar": 2,
+    "date": "2026-03-22"
+  },
+  {
+    "rationCard": "RC104",
+    "shopId": "S01",
+    "rice": 5,
+    "wheat": 2,
+    "sugar": 1,
+    "date": "2026-03-22"
+  },
+  {
+    "rationCard": "RC105",
+    "shopId": "S02",
+    "rice": 4,
+    "wheat": 3,
+    "sugar": 1,
+    "date": "2026-03-23"
+  },
+  {
+    "orderId": "ORD-1774933621779",
+    "rationCard": "RC102",
+    "userName": "Sita Devi",
+    "shopId": "S02",
+    "village": "Ramapuram",
+    "items": [
+      {
+        "itemKey": "rice",
+        "name": "Rice",
+        "qty": 2,
+        "price": 50,
+        "amount": 100
+      },
+      {
+        "itemKey": "wheat",
+        "name": "Wheat",
+        "qty": 1,
+        "price": 40,
+        "amount": 40
+      },
+      {
+        "itemKey": "kerosene",
+        "name": "Kerosene",
+        "qty": 1,
+        "price": 30,
+        "amount": 30
+      }
+    ],
+    "total": 170,
+    "rice": 2,
+    "wheat": 1,
+    "sugar": 0,
+    "kerosene": 1,
+    "date": "2026-03-31T05:07:01.779Z"
+  }
+]

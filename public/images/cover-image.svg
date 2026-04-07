@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" role="img" aria-labelledby="title desc">
+  <title id="title">Ration Service Cover</title>
+  <desc id="desc">Cover image showing a ration shop with home delivery and digital ordering theme.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d3154"/>
+      <stop offset="100%" stop-color="#114a73"/>
+    </linearGradient>
+    <linearGradient id="roof" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffcf64"/>
+      <stop offset="100%" stop-color="#f5a43d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <circle cx="190" cy="120" r="90" fill="#53e3c6" fill-opacity="0.2"/>
+  <circle cx="1010" cy="90" r="82" fill="#ffd97f" fill-opacity="0.2"/>
+
+  <rect x="260" y="210" width="680" height="280" rx="18" fill="#f3fbff"/>
+  <rect x="240" y="176" width="720" height="68" rx="14" fill="url(#roof)"/>
+  <rect x="515" y="310" width="170" height="180" rx="10" fill="#1f4e70"/>
+  <rect x="322" y="284" width="115" height="95" rx="10" fill="#b9dcf4"/>
+  <rect x="768" y="284" width="115" height="95" rx="10" fill="#b9dcf4"/>
+  <rect x="500" y="160" width="200" height="44" rx="10" fill="#183f5e"/>
+  <text x="600" y="188" text-anchor="middle" font-family="Verdana, sans-serif" font-size="24" font-weight="700" fill="#f6fcff">
+    SMART RATION
+  </text>
+
+  <g transform="translate(118,420)">
+    <rect x="0" y="32" width="156" height="92" rx="10" fill="#e3a358"/>
+    <rect x="30" y="0" width="156" height="124" rx="10" fill="#f6c175"/>
+    <text x="108" y="74" text-anchor="middle" font-family="Verdana, sans-serif" font-size="22" font-weight="700" fill="#7a4d1f">RICE</text>
+  </g>
+
+  <g transform="translate(888,425)">
+    <rect x="0" y="0" width="190" height="122" rx="12" fill="#8ad4c0"/>
+    <rect x="16" y="16" width="190" height="122" rx="12" fill="#62c3a8"/>
+    <text x="111" y="86" text-anchor="middle" font-family="Verdana, sans-serif" font-size="22" font-weight="700" fill="#1a4e3d">DELIVERY</text>
+  </g>
+
+  <g transform="translate(540,536)">
+    <rect x="0" y="0" width="120" height="24" rx="12" fill="#4de0c1" fill-opacity="0.45"/>
+  </g>
+</svg>

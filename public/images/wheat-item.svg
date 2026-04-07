@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" role="img" aria-label="Wheat">
+  <rect width="280" height="200" rx="24" fill="#d8a359"/>
+  <rect x="56" y="28" width="168" height="144" rx="14" fill="#f2c983"/>
+  <ellipse cx="140" cy="172" rx="90" ry="12" fill="#b47a35" fill-opacity="0.55"/>
+  <g fill="#f4dca7">
+    <path d="M100 126c12-16 14-30 6-42M104 124l8-8M108 114l10-8M112 104l10-8"/>
+    <path d="M140 126c12-16 14-30 6-42M144 124l8-8M148 114l10-8M152 104l10-8"/>
+    <path d="M180 126c12-16 14-30 6-42M184 124l8-8M188 114l10-8M192 104l10-8"/>
+  </g>
+  <text x="140" y="152" text-anchor="middle" font-family="Verdana, sans-serif" font-size="24" font-weight="700" fill="#6b4418">WHEAT</text>
+</svg>

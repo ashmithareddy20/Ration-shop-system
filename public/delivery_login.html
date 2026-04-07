@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delivery Login | Smart Ration Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #172f56;
+      --bg-2: #2a5f9b;
+      --surface: rgba(8, 25, 48, 0.78);
+      --text: #f5f9ff;
+      --muted: #c5d8ef;
+      --accent: #ffcf60;
+      --error: #ffc2b7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      color: var(--text);
+      font-family: "IBM Plex Sans", sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 207, 96, 0.2), transparent 32%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2));
+    }
+
+    .box {
+      width: min(430px, 100%);
+      border-radius: 18px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .lang-row {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .lang-row select {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 6px 8px;
+    }
+
+    .lang-row option {
+      color: #111111;
+      background: #ffffff;
+    }
+
+    .cover {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 14px;
+      display: block;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.6rem;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.94rem;
+      margin: 12px 0 6px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 12px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255, 207, 96, 0.2);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px;
+      background: linear-gradient(120deg, var(--accent), #ffe6a5);
+      color: #27344d;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .meta {
+      margin-top: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    a {
+      color: #dff0ff;
+      text-decoration: none;
+    }
+
+    .message {
+      margin-top: 12px;
+      min-height: 1.2rem;
+      color: var(--error);
+      font-size: 0.93rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="box">
+    <div class="lang-row">
+      <label id="langLabel" for="languageSelect">Language</label>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="te">Telugu</option>
+      </select>
+    </div>
+
+    <img class="cover" src="images/delivery-portal.jpg" alt="Delivery portal image">
+    <h1 id="pageTitle">Delivery Login</h1>
+    <p id="pageSubtitle">Sign in with village and phone number to view your assigned home deliveries.</p>
+
+    <form id="deliveryForm">
+      <label id="villageLabel" for="village">Village</label>
+      <input id="village" placeholder="Example: Kothapalli" required>
+
+      <label id="phoneLabel" for="phone">Phone</label>
+      <input id="phone" placeholder="Example: 9001112223" required>
+
+      <button id="loginBtn" type="submit">Login</button>
+      <div id="message" class="message"></div>
+    </form>
+
+    <div class="meta">
+      <span id="demoText">Demo: Kothapalli / 9001112223</span>
+      <a id="backLink" href="index.html">Back to Home</a>
+    </div>
+  </main>
+
+  <script>
+    const LANG_KEY = "ration_lang";
+    const DELIVERY_SESSION_KEY = "ration_delivery_session";
+    const form = document.getElementById("deliveryForm");
+    const message = document.getElementById("message");
+    const languageSelect = document.getElementById("languageSelect");
+
+    const copy = {
+      en: {
+        langLabel: "Language",
+        pageTitle: "Delivery Login",
+        pageSubtitle:
+          "Sign in with village and phone number to view your assigned home deliveries.",
+        villageLabel: "Village",
+        villagePlaceholder: "Example: Kothapalli",
+        phoneLabel: "Phone",
+        phonePlaceholder: "Example: 9001112223",
+        loginBtn: "Login",
+        demoText: "Demo: Kothapalli / 9001112223",
+        backLink: "Back to Home",
+      },
+      hi: {
+        langLabel: "भाषा",
+        pageTitle: "डिलीवरी लॉगिन",
+        pageSubtitle:
+          "गांव और फोन नंबर से लॉगिन करके अपने असाइन किए गए होम डिलीवरी ऑर्डर देखें।",
+        villageLabel: "गांव",
+        villagePlaceholder: "उदाहरण: Kothapalli",
+        phoneLabel: "फोन",
+        phonePlaceholder: "उदाहरण: 9001112223",
+        loginBtn: "लॉगिन",
+        demoText: "डेमो: Kothapalli / 9001112223",
+        backLink: "होम पर वापस जाएं",
+      },
+      te: {
+        langLabel: "భాష",
+        pageTitle: "డెలివరీ లాగిన్",
+        pageSubtitle:
+          "గ్రామం మరియు ఫోన్ నంబర్‌తో లాగిన్ అయి మీకు కేటాయించిన హోమ్ డెలివరీ ఆర్డర్లను చూడండి.",
+        villageLabel: "గ్రామం",
+        villagePlaceholder: "ఉదాహరణ: Kothapalli",
+        phoneLabel: "ఫోన్",
+        phonePlaceholder: "ఉదాహరణ: 9001112223",
+        loginBtn: "లాగిన్",
+        demoText: "డెమో: Kothapalli / 9001112223",
+        backLink: "హోమ్‌కు వెళ్ళండి",
+      },
+    };
+
+    function applyLanguage(lang) {
+      const text = copy[lang] || copy.en;
+      document.documentElement.lang = lang;
+      document.getElementById("langLabel").textContent = text.langLabel;
+      document.getElementById("pageTitle").textContent = text.pageTitle;
+      document.getElementById("pageSubtitle").textContent = text.pageSubtitle;
+      document.getElementById("villageLabel").textContent = text.villageLabel;
+      document.getElementById("phoneLabel").textContent = text.phoneLabel;
+      document.getElementById("loginBtn").textContent = text.loginBtn;
+      document.getElementById("demoText").textContent = text.demoText;
+      document.getElementById("backLink").textContent = text.backLink;
+      document.getElementById("village").placeholder = text.villagePlaceholder;
+      document.getElementById("phone").placeholder = text.phonePlaceholder;
+      localStorage.setItem(LANG_KEY, lang);
+    }
+
+    const savedLang = localStorage.getItem(LANG_KEY);
+    const initialLang = copy[savedLang] ? savedLang : "en";
+    languageSelect.value = initialLang;
+    applyLanguage(initialLang);
+
+    languageSelect.addEventListener("change", () => {
+      applyLanguage(languageSelect.value);
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== LANG_KEY) return;
+      const nextLanguage = copy[event.newValue] ? event.newValue : "en";
+      if (nextLanguage === languageSelect.value) return;
+      languageSelect.value = nextLanguage;
+      applyLanguage(nextLanguage);
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      message.textContent = "";
+
+      const payload = {
+        village: document.getElementById("village").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+      };
+
+      try {
+        const response = await fetch("/delivery/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Unable to login.");
+        }
+
+        localStorage.setItem(
+          DELIVERY_SESSION_KEY,
+          JSON.stringify({
+            village: data.deliveryPerson.village,
+            name: data.deliveryPerson.name,
+            phone: data.deliveryPerson.phone,
+          })
+        );
+        window.location.href = "delivery_dashboard.html";
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>

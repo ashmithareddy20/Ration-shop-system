@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delivery Dashboard | Smart Ration Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #0f2748;
+      --bg-2: #2f6198;
+      --surface: rgba(8, 27, 50, 0.76);
+      --surface-2: rgba(8, 27, 50, 0.88);
+      --text: #f5f9ff;
+      --muted: #bed4ec;
+      --border: rgba(255, 255, 255, 0.2);
+      --accent: #6ce4c9;
+      --danger: #ffb9af;
+      --ok: #9dffd8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px 16px 34px;
+      color: var(--text);
+      font-family: "IBM Plex Sans", sans-serif;
+      background:
+        radial-gradient(circle at 16% 10%, rgba(108, 228, 201, 0.2), transparent 32%),
+        radial-gradient(circle at 84% 20%, rgba(255, 214, 125, 0.18), transparent 34%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2));
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .top {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 16px 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .title {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      font-size: clamp(1.25rem, 2.8vw, 1.9rem);
+    }
+
+    .sub {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.93rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .lang-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .lang-wrap select {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.09);
+      color: var(--text);
+      padding: 7px 8px;
+    }
+
+    .lang-wrap option {
+      color: #111111;
+      background: #ffffff;
+    }
+
+    .month-input {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.09);
+      color: var(--text);
+      padding: 8px 10px;
+      outline: none;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-main {
+      background: linear-gradient(120deg, var(--accent), #b1f7e8);
+      color: #173a34;
+    }
+
+    .btn-danger {
+      background: linear-gradient(120deg, #ffbeb4, #ffd7d1);
+      color: #5b2924;
+    }
+
+    .grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px;
+    }
+
+    .card .label {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .card .value {
+      margin-top: 8px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .panel {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      overflow: auto;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.1rem;
+    }
+
+    .status {
+      min-height: 1.2rem;
+      margin-top: 8px;
+      color: var(--danger);
+      font-size: 0.92rem;
+    }
+
+    .status.ok {
+      color: var(--ok);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 8px 6px;
+      vertical-align: top;
+    }
+
+    th {
+      color: #ddedff;
+      font-weight: 600;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div>
+        <h1 id="pageTitle" class="title">Delivery Dashboard</h1>
+        <div id="deliveryInfo" class="sub">Loading profile...</div>
+      </div>
+      <div class="controls">
+        <div class="lang-wrap">
+          <label id="langLabel" for="languageSelect">Language</label>
+          <select id="languageSelect" aria-label="Language">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="te">Telugu</option>
+          </select>
+        </div>
+        <input id="monthKeyInput" class="month-input" type="month">
+        <button id="refreshBtn" class="btn-main" type="button">Refresh</button>
+        <button id="logoutBtn" class="btn-danger" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section class="grid">
+      <article class="card">
+        <div id="totalOrdersLabel" class="label">Total Orders</div>
+        <div id="totalOrders" class="value">0</div>
+      </article>
+      <article class="card">
+        <div id="paidOrdersLabel" class="label">Paid Orders</div>
+        <div id="paidOrders" class="value">0</div>
+      </article>
+      <article class="card">
+        <div id="collectionLabel" class="label">Collection Value</div>
+        <div id="totalAmount" class="value">Rs 0</div>
+      </article>
+      <article class="card">
+        <div id="villageLabel" class="label">Village</div>
+        <div id="villageValue" class="value">-</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2 id="assignmentsTitle">Assigned Deliveries</h2>
+      <div id="ordersWrap" class="muted">Loading deliveries...</div>
+      <div id="status" class="status"></div>
+    </section>
+  </main>
+
+  <script>
+    const LANG_KEY = "ration_lang";
+    const DELIVERY_SESSION_KEY = "ration_delivery_session";
+    const session = JSON.parse(localStorage.getItem(DELIVERY_SESSION_KEY) || "null");
+    if (!session || !session.village || !session.phone) {
+      window.location.href = "delivery_login.html";
+    }
+
+    const languageSelect = document.getElementById("languageSelect");
+    let currentLanguage = "en";
+
+    const I18N = {
+      en: {
+        pageTitle: "Delivery Dashboard | Smart Ration Shop",
+        langLabel: "Language",
+        headerTitle: "Delivery Dashboard",
+        loadingProfile: "Loading profile...",
+        refresh: "Refresh",
+        logout: "Logout",
+        totalOrdersLabel: "Total Orders",
+        paidOrdersLabel: "Paid Orders",
+        collectionLabel: "Collection Value",
+        villageLabel: "Village",
+        assignmentsTitle: "Assigned Deliveries",
+        loadingDeliveries: "Loading deliveries...",
+        noDeliveries: "No deliveries found for this month.",
+        thDate: "Date",
+        thOrderId: "Order ID",
+        thCard: "Card",
+        thUser: "User",
+        thShop: "Shop",
+        thItems: "Items",
+        thSlot: "Delivery Slot",
+        thPaymentStatus: "Payment Status",
+        thTotal: "Total",
+        unableFetch: "Unable to fetch deliveries.",
+        loadedMonth: "Loaded month {{month}}.",
+      },
+      hi: {
+        pageTitle: "डिलीवरी डैशबोर्ड | स्मार्ट राशन शॉप",
+        langLabel: "भाषा",
+        headerTitle: "डिलीवरी डैशबोर्ड",
+        loadingProfile: "प्रोफाइल लोड हो रहा है...",
+        refresh: "रिफ्रेश",
+        logout: "लॉगआउट",
+        totalOrdersLabel: "कुल ऑर्डर",
+        paidOrdersLabel: "भुगतान किए गए ऑर्डर",
+        collectionLabel: "कलेक्शन वैल्यू",
+        villageLabel: "गांव",
+        assignmentsTitle: "असाइन की गई डिलीवरी",
+        loadingDeliveries: "डिलीवरी लोड हो रही हैं...",
+        noDeliveries: "इस महीने के लिए कोई डिलीवरी नहीं मिली।",
+        thDate: "तारीख",
+        thOrderId: "ऑर्डर आईडी",
+        thCard: "कार्ड",
+        thUser: "यूज़र",
+        thShop: "शॉप",
+        thItems: "आइटम",
+        thSlot: "डिलीवरी स्लॉट",
+        thPaymentStatus: "पेमेंट स्थिति",
+        thTotal: "कुल",
+        unableFetch: "डिलीवरी डेटा प्राप्त नहीं हो सका।",
+        loadedMonth: "महीना {{month}} लोड किया गया।",
+      },
+      te: {
+        pageTitle: "డెలివరీ డ్యాష్‌బోర్డ్ | స్మార్ట్ రేషన్ షాప్",
+        langLabel: "భాష",
+        headerTitle: "డెలివరీ డ్యాష్‌బోర్డ్",
+        loadingProfile: "ప్రొఫైల్ లోడ్ అవుతోంది...",
+        refresh: "రిఫ్రెష్",
+        logout: "లాగౌట్",
+        totalOrdersLabel: "మొత్తం ఆర్డర్లు",
+        paidOrdersLabel: "చెల్లించిన ఆర్డర్లు",
+        collectionLabel: "సేకరణ విలువ",
+        villageLabel: "గ్రామం",
+        assignmentsTitle: "కేటాయించిన డెలివరీలు",
+        loadingDeliveries: "డెలివరీలు లోడ్ అవుతున్నాయి...",
+        noDeliveries: "ఈ నెలకు ఎలాంటి డెలివరీలు లేవు.",
+        thDate: "తేదీ",
+        thOrderId: "ఆర్డర్ ఐడి",
+        thCard: "కార్డు",
+        thUser: "యూజర్",
+        thShop: "షాప్",
+        thItems: "వస్తువులు",
+        thSlot: "డెలివరీ స్లాట్",
+        thPaymentStatus: "చెల్లింపు స్థితి",
+        thTotal: "మొత్తం",
+        unableFetch: "డెలివరీ వివరాలు తెచ్చుకోలేకపోయాం.",
+        loadedMonth: "{{month}} నెల డేటా లోడ్ అయింది.",
+      },
+    };
+
+    function t(key, vars = {}) {
+      const table = I18N[currentLanguage] || I18N.en;
+      const template = table[key] || I18N.en[key] || key;
+      return Object.entries(vars).reduce(
+        (result, [name, value]) => result.replaceAll(`{{${name}}}`, value ?? ""),
+        template
+      );
+    }
+
+    const ITEM_NAMES = {
+      rice: { en: "Rice", hi: "Chawal", te: "బియ్యం" },
+      wheat: { en: "Wheat", hi: "Gehun", te: "గోధుమ" },
+      sugar: { en: "Sugar", hi: "Cheeni", te: "చెక్కెర" },
+      kerosene: { en: "Kerosene", hi: "Kerosene", te: "కిరోసిన్" },
+    };
+
+    function resolveItemKey(itemKey, itemName) {
+      const normalizedKey = String(itemKey || "").trim().toLowerCase();
+      if (ITEM_NAMES[normalizedKey]) return normalizedKey;
+
+      const normalizedName = String(itemName || "")
+        .trim()
+        .toLowerCase()
+        .replaceAll("-", "")
+        .replaceAll(" ", "");
+
+      const aliases = {
+        rice: "rice",
+        chawal: "rice",
+        wheat: "wheat",
+        gehun: "wheat",
+        sugar: "sugar",
+        cheeni: "sugar",
+        kerosene: "kerosene",
+        kerosin: "kerosene",
+      };
+
+      return aliases[normalizedName] || normalizedKey;
+    }
+
+    function getLocalizedItemName(itemKey, fallbackName) {
+      const key = resolveItemKey(itemKey, fallbackName);
+      const names = ITEM_NAMES[key];
+      if (!names) return fallbackName || itemKey || "-";
+      return names[currentLanguage] || names.en;
+    }
+
+    function applyLanguage(lang) {
+      currentLanguage = I18N[lang] ? lang : "en";
+      localStorage.setItem(LANG_KEY, currentLanguage);
+      languageSelect.value = currentLanguage;
+      document.documentElement.lang = currentLanguage;
+      document.title = t("pageTitle");
+      document.getElementById("langLabel").textContent = t("langLabel");
+      document.getElementById("pageTitle").textContent = t("headerTitle");
+      document.getElementById("refreshBtn").textContent = t("refresh");
+      document.getElementById("logoutBtn").textContent = t("logout");
+      document.getElementById("totalOrdersLabel").textContent = t("totalOrdersLabel");
+      document.getElementById("paidOrdersLabel").textContent = t("paidOrdersLabel");
+      document.getElementById("collectionLabel").textContent = t("collectionLabel");
+      document.getElementById("villageLabel").textContent = t("villageLabel");
+      document.getElementById("assignmentsTitle").textContent = t("assignmentsTitle");
+      if (document.getElementById("deliveryInfo").textContent.trim() === "Loading profile..." || document.getElementById("deliveryInfo").textContent.trim() === "प्रोफाइल लोड हो रहा है..." || document.getElementById("deliveryInfo").textContent.trim() === "ప్రొఫైల్ లోడ్ అవుతోంది...") {
+        document.getElementById("deliveryInfo").textContent = t("loadingProfile");
+      }
+      if (document.getElementById("ordersWrap").textContent.trim() === "Loading deliveries..." || document.getElementById("ordersWrap").textContent.trim() === "डिलीवरी लोड हो रही हैं..." || document.getElementById("ordersWrap").textContent.trim() === "డెలివరీలు లోడ్ అవుతున్నాయి...") {
+        document.getElementById("ordersWrap").textContent = t("loadingDeliveries");
+      }
+    }
+
+    function getCurrentMonth() {
+      const now = new Date();
+      return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    function formatDate(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "-";
+      return date.toLocaleString();
+    }
+
+    function setStatus(message, ok = false) {
+      const node = document.getElementById("status");
+      node.textContent = message || "";
+      node.classList.toggle("ok", ok);
+    }
+
+    function renderOrders(orders) {
+      const wrap = document.getElementById("ordersWrap");
+      if (!orders.length) {
+        wrap.innerHTML = `<p class="muted">${escapeHtml(t("noDeliveries"))}</p>`;
+        return;
+      }
+
+      const rows = orders.map((order) => {
+        const items = (order.items || [])
+          .map((line) => `${getLocalizedItemName(line.itemKey, line.name)} (${line.qty})`)
+          .join(", ");
+        return `
+          <tr>
+            <td>${formatDate(order.date)}</td>
+            <td>${escapeHtml(order.orderId)}</td>
+            <td>${escapeHtml(order.rationCard)}</td>
+            <td>${escapeHtml(order.userName || "-")}</td>
+            <td>${escapeHtml(order.shopId)}</td>
+            <td>${escapeHtml(items)}</td>
+            <td>${escapeHtml(order.deliverySlot || "-")}</td>
+            <td>${escapeHtml(order.paymentStatus || "-")}</td>
+            <td>Rs ${Number(order.total || 0)}</td>
+          </tr>
+        `;
+      }).join("");
+
+      wrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>${t("thDate")}</th>
+              <th>${t("thOrderId")}</th>
+              <th>${t("thCard")}</th>
+              <th>${t("thUser")}</th>
+              <th>${t("thShop")}</th>
+              <th>${t("thItems")}</th>
+              <th>${t("thSlot")}</th>
+              <th>${t("thPaymentStatus")}</th>
+              <th>${t("thTotal")}</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    async function loadDeliveries() {
+      setStatus("");
+      const monthKey = document.getElementById("monthKeyInput").value || getCurrentMonth();
+
+      try {
+        const params = new URLSearchParams({
+          village: session.village,
+          phone: session.phone,
+          month: monthKey,
+        });
+        const response = await fetch(`/delivery/orders?${params.toString()}`);
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || t("unableFetch"));
+        }
+
+        document.getElementById("deliveryInfo").textContent =
+          `${data.deliveryPerson.name} (${data.deliveryPerson.phone || "-"})`;
+        document.getElementById("villageValue").textContent = data.deliveryPerson.village || "-";
+        document.getElementById("totalOrders").textContent = Number(data.stats.totalOrders || 0);
+        document.getElementById("paidOrders").textContent = Number(data.stats.paidOrders || 0);
+        document.getElementById("totalAmount").textContent = `Rs ${Number(data.stats.totalAmount || 0)}`;
+
+        renderOrders(data.orders || []);
+        setStatus(t("loadedMonth", { month: data.monthKey }), true);
+      } catch (error) {
+        setStatus(error.message);
+      }
+    }
+
+    const savedLang = localStorage.getItem(LANG_KEY);
+    applyLanguage(I18N[savedLang] ? savedLang : "en");
+    languageSelect.addEventListener("change", () => {
+      applyLanguage(languageSelect.value);
+      loadDeliveries();
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== LANG_KEY) return;
+      const nextLanguage = I18N[event.newValue] ? event.newValue : "en";
+      if (nextLanguage === currentLanguage) return;
+      applyLanguage(nextLanguage);
+      loadDeliveries();
+    });
+
+    document.getElementById("monthKeyInput").value = getCurrentMonth();
+    document.getElementById("monthKeyInput").addEventListener("change", loadDeliveries);
+    document.getElementById("refreshBtn").addEventListener("click", loadDeliveries);
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem(DELIVERY_SESSION_KEY);
+      window.location.href = "delivery_login.html";
+    });
+
+    loadDeliveries();
+  </script>
+</body>
+</html>

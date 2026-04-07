@@ -1,0 +1,23 @@
+[
+  {
+    "shopId": "S01",
+    "rice": 500,
+    "wheat": 300,
+    "sugar": 100,
+    "kerosene": 200
+  },
+  {
+    "shopId": "S02",
+    "rice": 598,
+    "wheat": 249,
+    "sugar": 150,
+    "kerosene": 299
+  },
+  {
+    "shopId": "S03",
+    "rice": 700,
+    "wheat": 400,
+    "sugar": 200,
+    "kerosene": 350
+  }
+]

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" role="img" aria-labelledby="title desc">
+  <title id="title">Admin Portal Illustration</title>
+  <desc id="desc">Administrator reviewing system analytics and low stock alerts.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5c2f16"/>
+      <stop offset="100%" stop-color="#3e1f10"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="480" rx="26" fill="url(#bg)"/>
+  <circle cx="100" cy="88" r="54" fill="#70e3c7" fill-opacity="0.22"/>
+  <circle cx="604" cy="82" r="62" fill="#ffc97b" fill-opacity="0.22"/>
+
+  <rect x="86" y="90" width="548" height="300" rx="20" fill="#fff5e8"/>
+  <rect x="86" y="90" width="548" height="56" rx="20" fill="#f0a95c"/>
+  <text x="128" y="126" font-family="Verdana, sans-serif" font-size="22" font-weight="700" fill="#fff9f3">Operations Dashboard</text>
+
+  <g transform="translate(122,190)">
+    <rect x="0" y="0" width="146" height="86" rx="12" fill="#ffe0b8"/>
+    <text x="73" y="36" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#7a4c22">Users</text>
+    <text x="73" y="64" text-anchor="middle" font-family="Verdana, sans-serif" font-size="27" font-weight="700" fill="#7a4c22">5</text>
+  </g>
+
+  <g transform="translate(292,190)">
+    <rect x="0" y="0" width="146" height="86" rx="12" fill="#ffe0b8"/>
+    <text x="73" y="36" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#7a4c22">Sellers</text>
+    <text x="73" y="64" text-anchor="middle" font-family="Verdana, sans-serif" font-size="27" font-weight="700" fill="#7a4c22">3</text>
+  </g>
+
+  <g transform="translate(462,190)">
+    <rect x="0" y="0" width="146" height="86" rx="12" fill="#ffe0b8"/>
+    <text x="73" y="36" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#7a4c22">Orders</text>
+    <text x="73" y="64" text-anchor="middle" font-family="Verdana, sans-serif" font-size="27" font-weight="700" fill="#7a4c22">5+</text>
+  </g>
+
+  <g transform="translate(120,302)">
+    <rect x="0" y="0" width="250" height="60" rx="10" fill="#ffd7a4"/>
+    <circle cx="30" cy="30" r="12" fill="#e77959"/>
+    <text x="52" y="35" font-family="Verdana, sans-serif" font-size="16" font-weight="700" fill="#7a3d22">Low Stock Alerts</text>
+  </g>
+
+  <g transform="translate(400,302)">
+    <rect x="0" y="40" width="50" height="24" rx="8" fill="#f7bb62"/>
+    <rect x="62" y="22" width="50" height="42" rx="8" fill="#f2a54d"/>
+    <rect x="124" y="6" width="50" height="58" rx="8" fill="#ee8e3a"/>
+  </g>
+</svg>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Login | Smart Ration Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #1a2e24;
+      --bg-2: #2f6c54;
+      --surface: rgba(9, 33, 24, 0.74);
+      --text: #f4fcf8;
+      --muted: #c3ddcf;
+      --accent: #f5c83d;
+      --error: #ffbfb5;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      color: var(--text);
+      font-family: "IBM Plex Sans", sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(245, 200, 61, 0.2), transparent 30%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2));
+    }
+
+    .box {
+      width: min(430px, 100%);
+      border-radius: 18px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .cover {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 14px;
+      display: block;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-family: "Sora", sans-serif;
+      font-size: 1.6rem;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.94rem;
+      margin: 12px 0 6px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 12px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(245, 200, 61, 0.22);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px;
+      background: linear-gradient(120deg, var(--accent), #ffe08a);
+      color: #203128;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .meta {
+      margin-top: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    a {
+      color: #d7fff1;
+      text-decoration: none;
+    }
+
+    .message {
+      margin-top: 12px;
+      min-height: 1.2rem;
+      color: var(--error);
+      font-size: 0.93rem;
+    }
+
+    .lang-row {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .lang-row select {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 6px 8px;
+    }
+
+    .lang-row option {
+      color: #1c3328;
+    }
+  </style>
+</head>
+<body>
+  <main class="box">
+    <div class="lang-row">
+      <label id="langLabel" for="languageSelect">Language</label>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="te">Telugu</option>
+      </select>
+    </div>
+    <img class="cover" src="images/seller-portal.jpg" alt="Seller portal image">
+    <h1 id="pageTitle">Seller Login</h1>
+    <p id="pageSubtitle">Manage your ration shop stock, review incoming orders, and keep distribution transparent.</p>
+
+    <form id="sellerForm">
+      <label id="shopLabel" for="shopId">Shop ID</label>
+      <input id="shopId" placeholder="Example: S01" required>
+
+      <label id="passwordLabel" for="password">Password</label>
+      <input id="password" type="password" placeholder="Enter password" required>
+
+      <button id="loginBtn" type="submit">Login</button>
+      <div id="message" class="message"></div>
+    </form>
+
+    <div class="meta">
+      <span id="demoHint">Demo: S01 / seller123</span>
+      <a id="backLink" href="index.html">Back to Home</a>
+    </div>
+  </main>
+
+  <script>
+    const LANG_KEY = "ration_lang";
+    const SELLER_SESSION_KEY = "ration_seller_session";
+    const form = document.getElementById("sellerForm");
+    const message = document.getElementById("message");
+    const languageSelect = document.getElementById("languageSelect");
+
+    const copy = {
+      en: {
+        langLabel: "Language",
+        title: "Seller Login",
+        subtitle:
+          "Manage your ration shop stock, review incoming orders, and keep distribution transparent.",
+        shopLabel: "Shop ID",
+        shopPlaceholder: "Example: S01",
+        passwordLabel: "Password",
+        passwordPlaceholder: "Enter password",
+        loginBtn: "Login",
+        demo: "Demo: S01 / seller123",
+        back: "Back to Home",
+      },
+      hi: {
+        langLabel: "Bhasha",
+        title: "Seller Login",
+        subtitle:
+          "Ration shop stock manage karein, incoming orders dekhein aur distribution transparent rakhein.",
+        shopLabel: "Shop ID",
+        shopPlaceholder: "Udaharan: S01",
+        passwordLabel: "Password",
+        passwordPlaceholder: "Password dalein",
+        loginBtn: "Login",
+        demo: "Demo: S01 / seller123",
+        back: "Home wapas",
+      },
+      te: {
+        langLabel: "భాష",
+        title: "సెల్లర్ లాగిన్",
+        subtitle:
+          "షాప్ స్టాక్ నిర్వహించండి, వచ్చే ఆర్డర్లను చూడండి మరియు పంపిణీని పారదర్శకంగా ఉంచండి.",
+        shopLabel: "షాప్ ఐడి",
+        shopPlaceholder: "ఉదాహరణ: S01",
+        passwordLabel: "పాస్వర్డ్",
+        passwordPlaceholder: "పాస్వర్డ్ నమోదు చేయండి",
+        loginBtn: "లాగిన్",
+        demo: "డెమో: S01 / seller123",
+        back: "హోమ్‌కు వెళ్ళండి",
+      },
+    };
+
+    function applyLanguage(lang) {
+      const text = copy[lang] || copy.en;
+      document.documentElement.lang = lang;
+      localStorage.setItem(LANG_KEY, lang);
+      document.getElementById("langLabel").textContent = text.langLabel;
+      document.getElementById("pageTitle").textContent = text.title;
+      document.getElementById("pageSubtitle").textContent = text.subtitle;
+      document.getElementById("shopLabel").textContent = text.shopLabel;
+      document.getElementById("passwordLabel").textContent = text.passwordLabel;
+      document.getElementById("loginBtn").textContent = text.loginBtn;
+      document.getElementById("demoHint").textContent = text.demo;
+      document.getElementById("backLink").textContent = text.back;
+      document.getElementById("shopId").placeholder = text.shopPlaceholder;
+      document.getElementById("password").placeholder = text.passwordPlaceholder;
+    }
+
+    const savedLanguage = localStorage.getItem(LANG_KEY);
+    languageSelect.value = copy[savedLanguage] ? savedLanguage : "en";
+    applyLanguage(languageSelect.value);
+    languageSelect.addEventListener("change", () => {
+      applyLanguage(languageSelect.value);
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key !== LANG_KEY) return;
+      const nextLanguage = copy[event.newValue] ? event.newValue : "en";
+      if (nextLanguage === languageSelect.value) return;
+      languageSelect.value = nextLanguage;
+      applyLanguage(nextLanguage);
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      message.textContent = "";
+
+      const payload = {
+        shopId: document.getElementById("shopId").value.trim(),
+        password: document.getElementById("password").value.trim(),
+      };
+
+      try {
+        const response = await fetch("/seller/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Unable to login.");
+        }
+
+        localStorage.setItem(SELLER_SESSION_KEY, JSON.stringify(data.seller));
+        window.location.href = "seller_dashboard.html";
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" role="img" aria-label="Rice">
+  <rect width="280" height="200" rx="24" fill="#f0b867"/>
+  <rect x="58" y="30" width="164" height="140" rx="14" fill="#ffd68f"/>
+  <ellipse cx="140" cy="172" rx="90" ry="12" fill="#d89844" fill-opacity="0.55"/>
+  <g fill="#fff6df">
+    <ellipse cx="100" cy="78" rx="5" ry="2.5"/>
+    <ellipse cx="122" cy="92" rx="5" ry="2.5"/>
+    <ellipse cx="145" cy="83" rx="5" ry="2.5"/>
+    <ellipse cx="168" cy="98" rx="5" ry="2.5"/>
+    <ellipse cx="132" cy="116" rx="5" ry="2.5"/>
+    <ellipse cx="96" cy="118" rx="5" ry="2.5"/>
+    <ellipse cx="162" cy="120" rx="5" ry="2.5"/>
+  </g>
+  <text x="140" y="150" text-anchor="middle" font-family="Verdana, sans-serif" font-size="26" font-weight="700" fill="#7a4c1d">RICE</text>
+</svg>

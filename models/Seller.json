@@ -1,0 +1,23 @@
+[
+{
+"shopId":"S01",
+"name":"Mahesh Kumar",
+"village":"Kothapalli",
+"phone":"9999991111",
+"password":"seller123"
+},
+{
+"shopId":"S02",
+"name":"Ramesh Gupta",
+"village":"Ramapuram",
+"phone":"8888882222",
+"password":"seller123"
+},
+{
+"shopId":"S03",
+"name":"Suresh Naidu",
+"village":"Madhavaram",
+"phone":"7777773333",
+"password":"seller123"
+}
+]
